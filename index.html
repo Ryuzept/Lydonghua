@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LYDONGHUA Web Platform</title>
+<script src="https://cdn.socket.io/4.7.1/socket.io.min.js"></script>
+<style>
+  body { font-family: Arial; background:#F8F7F4; color:#121212; margin:0; padding:0; transition: background 0.3s, color 0.3s;}
+  body.dark { background:#121212; color:#F8F7F4;}
+  header { background:#D4AF37; padding:10px; text-align:center; color:white;}
+  nav { display:flex; justify-content:center; gap:10px; margin:10px 0;}
+  nav button { padding:5px 10px; cursor:pointer;}
+  .tab { display:none; padding:10px;}
+  .active { display:block;}
+  video { width:100%; max-width:640px; margin:10px 0;}
+  #chat { max-height:200px; overflow-y:auto; border:1px solid #ccc; padding:5px; margin-top:10px;}
+  input, button { padding:5px;}
+  #darkToggle { position:absolute; top:10px; right:10px; cursor:pointer;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>LYDONGHUA Web Platform</h1>
+</header>
+
+<button id="darkToggle" onclick="toggleDark()">🌙</button>
+
+<nav>
+  <button onclick="showTab('home')">Home</button>
+  <button onclick="showTab('anime')">Anime</button>
+  <button onclick="showTab('donghua')">Donghua</button>
+  <button onclick="showTab('nobar')">Nobar</button>
+  <button onclick="showTab('account')">Account</button>
+</nav>
+
+<div id="home" class="tab active">
+  <h2>Home</h2>
+  <p>Selamat datang di LYDONGHUA Web!</p>
+</div>
+
+<div id="anime" class="tab">
+  <h2>Anime</h2>
+  <ul id="anime-list"></ul>
+</div>
+
+<div id="donghua" class="tab">
+  <h2>Donghua</h2>
+  <ul id="donghua-list"></ul>
+</div>
+
+<div id="nobar" class="tab">
+  <h2>Nobar Room</h2>
+  <video id="video" controls>
+    <source src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" type="application/x-mpegURL">
+  </video>
+  <div>
+    <input type="text" id="chat-input" placeholder="Ketik pesan...">
+    <button onclick="sendChat()">Kirim</button>
+    <button onclick="sendGift()">🎁 Gift 10 koin</button>
+  </div>
+  <div id="chat"></div>
+</div>
+
+<div id="account" class="tab">
+  <h2>Account</h2>
+  <p>Nama: <span id="user-name">User</span></p>
+  <p>Koin: <span id="user-coin">100</span></p>
+  <button onclick="earnCoin()">+50 Koin</button>
+</div>
+
+<script>
+// Dummy data
+const animeData = [{id:1,title:'Naruto'},{id:2,title:'One Piece'}];
+const donghuaData = [{id:1,title:'The King\'s Avatar'}];
+const episodesData = [
+  {id:1, content_id:1, episode_number:1, title:'Episode 1', video_url:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'},
+  {id:2, content_id:1, episode_number:2, title:'Episode 2', video_url:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'},
+  {id:3, content_id:2, episode_number:1, title:'Episode 1', video_url:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'}
+];
+
+// Populate lists
+const animeList = document.getElementById('anime-list');
+animeData.forEach(a => animeList.innerHTML += `<li>${a.title}</li>`);
+
+const donghuaList = document.getElementById('donghua-list');
+donghuaData.forEach(d => donghuaList.innerHTML += `<li>${d.title}</li>`);
+
+// Tab navigation
+function showTab(id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// Dark mode
+function toggleDark(){ document.body.classList.toggle('dark'); }
+
+// Nobar & Socket.IO
+const socket = io("http://localhost:3000/nobar"); // backend Socket.IO harus aktif
+socket.on('connect', ()=>console.log('Connected to Nobar'));
+socket.on('chat_message', data=>{
+  const chatDiv = document.getElementById('chat');
+  chatDiv.innerHTML += `<p><b>${data.user}:</b> ${data.message}</p>`;
+  chatDiv.scrollTop = chatDiv.scrollHeight;
+});
+socket.on('gift_coin', data=>{
+  const chatDiv = document.getElementById('chat');
+  chatDiv.innerHTML += `<p><b>${data.from}</b> mengirim gift ${data.amount} koin 🎁</p>`;
+});
+
+// Chat & gift functions
+function sendChat(){
+  const input = document.getElementById('chat-input');
+  const msg = input.value;
+  if(msg) { socket.emit('chat_message', {user:'User', message:msg}); input.value=''; }
+}
+function sendGift(){
+  socket.emit('gift_coin', {from:'User', amount:10});
+  const coinsSpan = document.getElementById('user-coin');
+  coinsSpan.textContent = parseInt(coinsSpan.textContent)-10;
+}
+
+// Dummy account functions
+function earnCoin(){
+  const coinsSpan = document.getElementById('user-coin');
+  coinsSpan.textContent = parseInt(coinsSpan.textContent)+50;
+}
+</script>
+
+</body>
+</html>
