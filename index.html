@@ -1,0 +1,185 @@
+<!DOCTYPE html><html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OtakuVerse — Anime & Donghua</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      min-height: 100vh;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    header h1 {
+      font-weight: 700;
+      color: #00e0ff;
+    }
+    nav a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    nav a:hover { color: #00e0ff; }.hero {
+  padding: 80px 40px;
+  text-align: center;
+}
+.hero h2 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+.hero p {
+  opacity: 0.85;
+  max-width: 700px;
+  margin: auto;
+}
+
+.search-box {
+  margin: 40px auto;
+  max-width: 500px;
+  display: flex;
+}
+.search-box input {
+  flex: 1;
+  padding: 15px;
+  border: none;
+  border-radius: 30px 0 0 30px;
+  outline: none;
+}
+.search-box button {
+  padding: 15px 25px;
+  border: none;
+  border-radius: 0 30px 30px 0;
+  background: #00e0ff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.section {
+  padding: 40px;
+}
+.section h3 {
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 25px;
+}
+.card {
+  background: rgba(255,255,255,0.08);
+  border-radius: 20px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+.card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+.card img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+}
+.card .info {
+  padding: 15px;
+}
+.card .info h4 {
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+.card .info span {
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+footer {
+  text-align: center;
+  padding: 30px;
+  background: rgba(0,0,0,0.5);
+  margin-top: 40px;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+@media (max-width: 600px) {
+  .hero h2 { font-size: 2rem; }
+  header { flex-direction: column; gap: 10px; }
+}
+
+  </style>
+</head>
+<body>
+  <header>
+    <h1>OtakuVerse</h1>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#anime">Anime</a>
+      <a href="#donghua">Donghua</a>
+      <a href="#">Genre</a>
+    </nav>
+  </header>  <section class="hero">
+    <h2>Nonton Anime & Donghua Favoritmu</h2>
+    <p>Streaming anime Jepang dan donghua China dengan kualitas HD, subtitle lengkap, dan tampilan modern yang nyaman di semua perangkat.</p><div class="search-box">
+  <input type="text" placeholder="Cari anime atau donghua..." />
+  <button>Cari</button>
+</div>
+
+  </section>  <section class="section" id="anime">
+    <h3>🔥 Anime Populer</h3>
+    <div class="grid">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1608889175112-1aef1c55c86a" />
+        <div class="info">
+          <h4>Attack on Titan</h4>
+          <span>Action • Drama</span>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1546443046-ed1ce6ffd1ab" />
+        <div class="info">
+          <h4>Demon Slayer</h4>
+          <span>Action • Fantasy</span>
+        </div>
+      </div>
+    </div>
+  </section>  <section class="section" id="donghua">
+    <h3>🌸 Donghua Populer</h3>
+    <div class="grid">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba" />
+        <div class="info">
+          <h4>Battle Through The Heavens</h4>
+          <span>Action • Cultivation</span>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97" />
+        <div class="info">
+          <h4>Soul Land</h4>
+          <span>Fantasy • Adventure</span>
+        </div>
+      </div>
+    </div>
+  </section>  <footer>
+    © 2026 OtakuVerse • UI Concept for GitHub Pages
+  </footer>
+</body>
+          </html>
