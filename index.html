@@ -52,20 +52,11 @@ nav button.active{color:var(--primary)}
   <div id="episodeList"></div>
  </div>
 </main><main id="player" class="hidden">
- <button class="btn" onclick="toggleChat()">💬 Chat</button>
  <iframe id="extFrame"></iframe>
 </main><nav>
  <button class="active" onclick="show('home')">Home</button>
  <button onclick="show('history')">Riwayat</button>
-</nav><div id="chatModal" class="modal hidden">
- <div class="modal-card">
-  <h3>Live Chat</h3>
-  <div id="chatBox" style="height:200px;overflow:auto;background:#000;padding:8px;border-radius:8px"></div>
-  <input id="chatInput" placeholder="Pesan..." style="width:100%;padding:6px;margin-top:6px" />
-  <button class="btn" onclick="sendChat()">Kirim</button>
-  <button class="btn" onclick="closeChat()">Tutup</button>
- </div>
-</div><script>
+</nav><script>
 let coin=100;
 const series=[
  {title:'Soul Land',eps:250,poster:'https://cdn.myanimelist.net/images/anime/1888/121710.jpg'},
@@ -79,8 +70,7 @@ function openDetail(s){show('detail');detailHero.style.backgroundImage=`url(${s.
 function playEpisode(ep){if(coin<=0){alert('Koin habis');return;}coin--;document.getElementById('coin').innerText='🪙 '+coin;show('player');extFrame.src=`https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(detailTitle.innerText+' episode '+ep)}`;saveHistory(detailTitle.innerText);} 
 function show(id){document.querySelectorAll('main').forEach(m=>m.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
 function doSearch(){const q=search.value.toLowerCase();render(series.filter(s=>s.title.toLowerCase().includes(q)));}
-// chat
-function toggleChat(){chatModal.classList.remove('hidden');renderChat();}
+}
 function closeChat(){document.getElementById('chatModal').classList.add('hidden');}
 const chatKey='ly_chat';
 function sendChat(){const msg=chatInput.value.trim();if(!msg)return;const data=JSON.parse(localStorage.getItem(chatKey)||'[]');data.push({msg});localStorage.setItem(chatKey,JSON.stringify(data));chatInput.value='';renderChat();}
