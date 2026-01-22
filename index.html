@@ -1,222 +1,173 @@
 <!DOCTYPE html><html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DonghuaStream</title>
-    <style>
-        body, html { margin:0; padding:0; font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #0e0e0e; color: #ffffff; transition: background 0.3s, color 0.3s; }
-        a { color: #FF4C00; text-decoration: none; }nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.8rem 2rem;
-        background-color: #1b1b1b;
-        position: fixed;
-        width: 100%;
-        top: 0;
-        z-index: 1000;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZERO Anime & Donghua</title>
+  <style>
+    :root {
+      --bg: #0b0b0f;
+      --card: #15151d;
+      --purple: #9b5cff;
+      --text: #ffffff;
+      --muted: #9a9a9a;
     }
-    nav .logo { font-size: 1.8rem; font-weight: bold; color: #FF4C00; }
-    nav .menu a { margin-left: 1.5rem; font-weight: 500; }
+    * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
+    body { margin: 0; background: var(--bg); color: var(--text); }header {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+header .user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+header img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+header .name { font-weight: bold; }
 
-    .hero {
-        margin-top: 70px;
-        height: 450px;
-        background: url('https://via.placeholder.com/1400x450') center/cover no-repeat;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2.5rem;
-        font-weight: bold;
-        text-shadow: 2px 2px 10px rgba(0,0,0,0.7);
-        border-bottom-left-radius: 20px;
-        border-bottom-right-radius: 20px;
-    }
+.section { padding: 0 16px 20px; }
+.title { font-size: 20px; margin-bottom: 10px; }
 
-    .search-bar {
-        margin: 1rem 2rem;
-        display: flex;
-    }
-    .search-bar input { flex:1; padding:0.6rem; border-radius:8px 0 0 8px; border:none; }
-    .search-bar button { padding:0.6rem 1rem; border:none; background:#FF4C00; color:#fff; border-radius:0 8px 8px 0; cursor:pointer; }
-    .search-bar button:hover { background:#FF7B50; }
+.announcement {
+  background: var(--card);
+  padding: 14px;
+  border-radius: 12px;
+  color: var(--muted);
+}
 
-    .section { padding: 2rem; }
-    .section h2 { margin-bottom: 1rem; color: #FF4C00; }
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
-    }
-    .card {
-        background: #1f1f1f;
-        border-radius: 16px;
-        overflow: hidden;
-        position: relative;
-        cursor: pointer;
-        transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .card:hover { transform: scale(1.05); box-shadow: 0 0 20px #FF4C00; }
-    .card img { width: 100%; display: block; border-bottom: 1px solid #333; }
-    .card .title {
-        position: absolute;
-        bottom: 10px;
-        left: 10px;
-        font-weight: bold;
-        background: rgba(0,0,0,0.6);
-        padding: 0.3rem 0.5rem;
-        border-radius: 6px;
-        color: #fff;
-    }
-    .card button {
-        margin: 0.5rem;
-        padding: 0.5rem 0.8rem;
-        background-color: #FF4C00;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: bold;
-        color: #fff;
-        transition: background 0.3s;
-    }
-    .card button:hover { background-color: #FF7B50; }
+.genres {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+}
+.genre {
+  background: var(--card);
+  padding: 10px 16px;
+  border-radius: 20px;
+  white-space: nowrap;
+  color: var(--purple);
+  cursor: pointer;
+}
 
-    .wallet {
-        position: fixed;
-        top: 80px;
-        right: 20px;
-        background-color: #1b1b1b;
-        padding: 1rem;
-        border-radius: 12px;
-        text-align: center;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    }
-    .wallet button { margin-top: 0.5rem; background-color: #FF4C00; }
-    .wallet button:hover { background-color: #FF7B50; }
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.row span { color: var(--purple); font-size: 14px; cursor: pointer; }
 
-    .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 1001; }
-    .modal-content { background:#2b2b2b; padding:2rem; border-radius:16px; width:320px; text-align:center; }
-    .modal input { width: 90%; padding:0.6rem; margin:0.5rem 0; border-radius:8px; border:none; }
-    .modal button { padding:0.5rem 1rem; background:#FF4C00; border:none; border-radius:8px; cursor:pointer; font-weight:bold; }
-    .modal button:hover { background:#FF7B50; }
+.cards {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+}
+.card {
+  min-width: 160px;
+  background: var(--card);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+.card .info { padding: 10px; }
+.badge {
+  display: inline-block;
+  background: var(--purple);
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
 
-    .chat-box { position: fixed; bottom: 0; right:0; width:320px; max-height:400px; background:#1b1b1b; border-top-left-radius:16px; border-top-right-radius:16px; display:flex; flex-direction: column; box-shadow: 0 -4px 12px rgba(0,0,0,0.5); }
-    .chat-messages { flex:1; padding:0.5rem; overflow-y:auto; }
-    .chat-input { display:flex; }
-    .chat-input input { flex:1; padding:0.5rem; border:none; border-radius:0 0 0 12px; }
-    .chat-input button { padding:0.5rem; border:none; border-radius:0 0 12px 0; background:#FF4C00; cursor:pointer; }
-    .chat-input button:hover { background:#FF7B50; }
+nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #0e0e14;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  border-top: 1px solid #1e1e2a;
+}
+nav div { color: var(--muted); font-size: 14px; }
+nav .active { color: var(--purple); }
 
-    /* Bottom Buttons */
-    .bottom-buttons { position: fixed; bottom: 10px; width: 100%; display: flex; justify-content: space-between; padding: 0 2rem; z-index:1002; }
-    .bottom-buttons .left, .bottom-buttons .center, .bottom-buttons .right { display:flex; gap: 0.8rem; }
-    .bottom-buttons button { padding:0.5rem 1rem; border:none; border-radius:8px; background:#FF4C00; color:#fff; cursor:pointer; font-weight:bold; transition: background 0.3s; }
-    .bottom-buttons button:hover { background:#FF7B50; }
-
-    footer { text-align:center; padding:2rem; background:#1b1b1b; margin-top:2rem; color:#888; }
-</style>
-
+  </style>
 </head>
-<body><nav>
-    <div class="logo">DonghuaStream</div>
-    <div class="menu">
-        <a href="#" onclick="openLogin()">Login</a>
+<body>  <header>
+    <div class="user">
+      <img src="https://i.imgur.com/8Km9tLL.png" alt="avatar" />
+      <div>
+        <div>Welcome</div>
+        <div class="name">ZERO</div>
+      </div>
     </div>
-</nav>
-
-<div class="search-bar">
-    <input type="text" id="searchInput" placeholder="Cari Anime / Donghua...">
-    <button onclick="searchContent()">Cari</button>
-</div>
-
-<div class="hero">Nikmati Anime & Donghua Terbaru!</div>
-
-<div class="section" id="anime">
-    <h2>Anime Terbaru</h2>
-    <div class="grid" id="animeGrid"></div>
-</div>
-
-<div class="section" id="donghua">
-    <h2>Donghua Terbaru</h2>
-    <div class="grid" id="donghuaGrid"></div>
-</div>
-
-<div class="wallet">
-    <div>Koin Anda: <span id="coinBalance">0</span></div>
-    <button onclick="earnCoins()">Tonton & Dapat Koin +10</button>
-</div>
-
-<div class="modal" id="loginModal">
-    <div class="modal-content">
-        <h3>Login</h3>
-        <input type="text" placeholder="Username" id="username">
-        <input type="password" placeholder="Password" id="password">
-        <button onclick="login()">Login</button>
+    <div>🔍</div>
+  </header>  <div class="section">
+    <div class="title">Pengumuman</div>
+    <div class="announcement">Kami berupaya memberikan yang terbaik untuk Anda. Terimakasih atas dukungannya 😁</div>
+  </div>  <div class="section">
+    <div class="title">Semua Genre</div>
+    <div class="genres">
+      <div class="genre">Donghua</div>
+      <div class="genre">Anime</div>
+      <div class="genre">Movie</div>
+      <div class="genre">Action</div>
+      <div class="genre">Fantasy</div>
+      <div class="genre">Romance</div>
     </div>
-</div>
-
-<div class="chat-box" id="chatBox">
-    <div class="chat-messages" id="chatMessages"></div>
-    <div class="chat-input">
-        <input type="text" id="chatInput" placeholder="Ketik pesan...">
-        <button onclick="sendMessage()">Kirim</button>
+  </div>  <div class="section">
+    <div class="row">
+      <div class="title">Lanjutkan Nonton</div>
+      <span>Lihat History</span>
     </div>
-</div>
-
-<div class="bottom-buttons">
-    <div class="left"><button onclick="scrollToSection('anime')">Anime</button><button onclick="scrollToSection('donghua')">Donghua</button></div>
-    <div class="center"><button onclick="scrollToTop()">Home</button></div>
-    <div class="right"><button onclick="openLogin()">Akun Saya</button><button onclick="toggleTheme()">Ganti Tema</button></div>
-</div>
-
-<footer>&copy; 2026 DonghuaStream | Legal Streaming Only</footer>
-
-<script>
-    let coinBalance = 0;
-    const animeList = ['Anime 1','Anime 2','Anime 3','Anime 4','Anime 5','Anime 6'];
-    const donghuaList = ['Donghua 1','Donghua 2','Donghua 3','Donghua 4','Donghua 5','Donghua 6'];
-
-    function populateContent() {
-        const animeGrid = document.getElementById('animeGrid');
-        animeGrid.innerHTML = '';
-        animeList.forEach(title => {
-            const div = document.createElement('div');
-            div.className = 'card';
-            div.innerHTML = `<img src='https://via.placeholder.com/200x300'><div class='title'>${title}</div><button onclick='unlockEpisode(this)'>Unlock Episode (50 Koin)</button>`;
-            animeGrid.appendChild(div);
-        });
-
-        const donghuaGrid = document.getElementById('donghuaGrid');
-        donghuaGrid.innerHTML = '';
-        donghuaList.forEach(title => {
-            const div = document.createElement('div');
-            div.className = 'card';
-            div.innerHTML = `<img src='https://via.placeholder.com/200x300'><div class='title'>${title}</div><button onclick='unlockEpisode(this)'>Unlock Episode (50 Koin)</button>`;
-            donghuaGrid.appendChild(div);
-        });
-    }
-
-    function scrollToSection(id) { document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
-    function scrollToTop() { window.scrollTo({top:0, behavior:'smooth'}); }
-
-    function openLogin() { document.getElementById('loginModal').style.display = 'flex'; }
-    function login() { const username = document.getElementById('username').value; if(username){ alert('Login sukses: '+username); document.getElementById('loginModal').style.display='none'; } }
-
-    function sendMessage() { const input=document.getElementById('chatInput'); const msg=input.value; if(msg){ const div=document.createElement('div'); div.textContent=msg; document.getElementById('chatMessages').appendChild(div); input.value=''; document.getElementById('chatMessages').scrollTop=document.getElementById('chatMessages').scrollHeight;} }
-    function earnCoins(){ coinBalance+=10; document.getElementById('coinBalance').textContent=coinBalance; alert('Koin +10! Total koin: '+coinBalance);} 
-    function unlockEpisode(button){ const cost=50; if(coinBalance>=cost){ coinBalance-=cost; document.getElementById('coinBalance').textContent=coinBalance; button.textContent='Episode Terbuka!'; button.disabled=true; alert('Episode berhasil dibuka! Koin tersisa: '+coinBalance);}else{ alert('Koin tidak cukup! Tonton lebih banyak untuk dapat koin.');}}
-
-    let themeIndex = 0;
-    const themes = [
-        {bg:'#0e0e0e', text:'#ffffff'},
-        {bg:'#f0f0f0', text:'#000000'},
-        {bg:'#001f3f', text:'#ffffff'},
-        {bg:'#2e1b2f', text:'#ffccff'}
-    ];
-    function toggleTheme(){ themeIndex=(themeIndex+1)%themes.length; document.body.style.background=themes[themeIndex].bg; document.body.style.color=themes[themeIndex].text; }
-
-    function searchContent(){ const query=document.getElementById('searchInput').value.toLowerCase(); animeList.forEach((title,i)=>{document.getElementById('animeGrid').children[i].style.display=title.toLowerCase().includes(query)?'':'none';}); donghuaList.forEach((title,i)=>{document.getElementById('donghuaGrid').children[i].style.display=title.toLowerCase().includes(query)?'':'none';});}
+    <div class="cards">
+      <div class="card">
+        <img src="https://i.imgur.com/9XqK7YF.jpg" />
+        <div class="info">Episode 66<br/>Tales of Herding Gods</div>
+      </div>
+      <div class="card">
+        <img src="https://i.imgur.com/Jt6Xk0N.jpg" />
+        <div class="info">Episode 21<br/>Supreme Alchemy</div>
+      </div>
+    </div>
+  </div>  <div class="section">
+    <div class="row">
+      <div class="title">Episode Terbaru</div>
+      <span>Lihat Jadwal</span>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <img src="https://i.imgur.com/2nCt3Sbl.jpg" />
+        <div class="info"><span class="badge">New</span><br/>13 Eps</div>
+      </div>
+      <div class="card">
+        <img src="https://i.imgur.com/8zQZ4FZl.jpg" />
+        <div class="info"><span class="badge">New</span><br/>125 Eps</div>
+      </div>
+      <div class="card">
+        <img src="https://i.imgur.com/5tj6S7Ol.jpg" />
+        <div class="info"><span class="badge">New</span><br/>49 Eps</div>
+      </div>
+    </div>
+  </div>  <nav>
+    <div class="active">Home</div>
+    <div>Schedule</div>
+    <div>Catalog</div>
+    <div>Library</div>
+    <div>Profile</div>
+  </nav></body>
+</html>y)?'':'none';});}
 
     populateContent();
 </script>
