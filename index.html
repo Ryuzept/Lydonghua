@@ -2,175 +2,121 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ZERO Anime & Donghua</title>
+  <title>ZERO Anime</title>
   <style>
-    :root {
-      --bg: #0b0b0f;
-      --card: #15151d;
-      --purple: #9b5cff;
-      --text: #ffffff;
-      --muted: #9a9a9a;
+    :root{
+      --bg:#0a0a0f;
+      --card:#14141d;
+      --card-soft:#1b1b26;
+      --primary:#8b5cf6;
+      --primary-soft:#a78bfa;
+      --text:#ffffff;
+      --muted:#9ca3af;
     }
-    * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
-    body { margin: 0; background: var(--bg); color: var(--text); }header {
-  padding: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-header .user {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-header img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-}
-header .name { font-weight: bold; }
+    *{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+    body{margin:0;background:var(--bg);color:var(--text)}
+    img{display:block}/* HEADER */
+header{display:flex;align-items:center;justify-content:space-between;padding:16px}
+.user{display:flex;gap:12px;align-items:center}
+.avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#ec4899)}
+.welcome{font-size:13px;color:var(--muted)}
+.username{font-weight:700;letter-spacing:.5px}
+.search{font-size:20px;color:var(--primary)}
 
-.section { padding: 0 16px 20px; }
-.title { font-size: 20px; margin-bottom: 10px; }
+/* SECTION */
+.section{padding:0 16px 22px}
+.title{font-size:20px;font-weight:700;margin-bottom:12px}
+.row{display:flex;justify-content:space-between;align-items:center}
+.row span{color:var(--primary);font-size:13px}
 
-.announcement {
-  background: var(--card);
-  padding: 14px;
-  border-radius: 12px;
-  color: var(--muted);
-}
+/* ANNOUNCEMENT */
+.announcement{background:linear-gradient(135deg,#1f1f2e,#14141d);padding:16px;border-radius:16px;font-size:14px;color:#d1d5db}
 
-.genres {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-}
-.genre {
-  background: var(--card);
-  padding: 10px 16px;
-  border-radius: 20px;
-  white-space: nowrap;
-  color: var(--purple);
-  cursor: pointer;
-}
+/* GENRE */
+.genres{display:flex;gap:10px;overflow-x:auto}
+.genre{padding:10px 18px;border-radius:999px;background:var(--card-soft);color:var(--primary-soft);font-size:14px;white-space:nowrap}
 
-.row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-.row span { color: var(--purple); font-size: 14px; cursor: pointer; }
+/* CARDS */
+.cards{display:flex;gap:14px;overflow-x:auto}
+.card{min-width:150px;background:var(--card);border-radius:18px;overflow:hidden;position:relative}
+.card img{width:100%;height:220px;object-fit:cover}
+.card .info{padding:10px;font-size:14px}
+.episode{font-size:12px;color:var(--muted)}
+.badge{position:absolute;top:10px;left:10px;background:var(--primary);padding:4px 10px;border-radius:10px;font-size:11px;font-weight:600}
 
-.cards {
-  display: flex;
-  gap: 14px;
-  overflow-x: auto;
-}
-.card {
-  min-width: 160px;
-  background: var(--card);
-  border-radius: 14px;
-  overflow: hidden;
-}
-.card img {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-}
-.card .info { padding: 10px; }
-.badge {
-  display: inline-block;
-  background: var(--purple);
-  padding: 4px 8px;
-  border-radius: 8px;
-  font-size: 12px;
-  margin-bottom: 6px;
-}
-
-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #0e0e14;
-  display: flex;
-  justify-content: space-around;
-  padding: 10px 0;
-  border-top: 1px solid #1e1e2a;
-}
-nav div { color: var(--muted); font-size: 14px; }
-nav .active { color: var(--purple); }
+/* BOTTOM NAV */
+nav{position:fixed;bottom:0;left:0;right:0;background:#0e0e15;border-top:1px solid #1f1f2e;display:flex;justify-content:space-around;padding:10px 0}
+nav div{font-size:12px;color:var(--muted)}
+nav .active{color:var(--primary)}
 
   </style>
 </head>
-<body>  <header>
-    <div class="user">
-      <img src="https://i.imgur.com/8Km9tLL.png" alt="avatar" />
-      <div>
-        <div>Welcome</div>
-        <div class="name">ZERO</div>
-      </div>
+<body><header>
+  <div class="user">
+    <div class="avatar"></div>
+    <div>
+      <div class="welcome">Welcome</div>
+      <div class="username">ZERO</div>
     </div>
-    <div>🔍</div>
-  </header>  <div class="section">
-    <div class="title">Pengumuman</div>
-    <div class="announcement">Kami berupaya memberikan yang terbaik untuk Anda. Terimakasih atas dukungannya 😁</div>
-  </div>  <div class="section">
-    <div class="title">Semua Genre</div>
-    <div class="genres">
-      <div class="genre">Donghua</div>
-      <div class="genre">Anime</div>
-      <div class="genre">Movie</div>
-      <div class="genre">Action</div>
-      <div class="genre">Fantasy</div>
-      <div class="genre">Romance</div>
+  </div>
+  <div class="search">🔍</div>
+</header><section class="section">
+  <div class="title">Pengumuman</div>
+  <div class="announcement">Kami terus meningkatkan kualitas streaming anime & donghua. Terima kasih atas dukunganmu ✨</div>
+</section><section class="section">
+  <div class="title">Semua Genre</div>
+  <div class="genres">
+    <div class="genre">Anime</div>
+    <div class="genre">Donghua</div>
+    <div class="genre">Action</div>
+    <div class="genre">Fantasy</div>
+    <div class="genre">Romance</div>
+    <div class="genre">Cultivation</div>
+  </div>
+</section><section class="section">
+  <div class="row">
+    <div class="title">Lanjutkan Nonton</div>
+    <span>History</span>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <span class="badge">EP 66</span>
+      <img src="https://i.imgur.com/9XqK7YF.jpg">
+      <div class="info">Tales of Herding Gods</div>
     </div>
-  </div>  <div class="section">
-    <div class="row">
-      <div class="title">Lanjutkan Nonton</div>
-      <span>Lihat History</span>
+    <div class="card">
+      <span class="badge">EP 21</span>
+      <img src="https://i.imgur.com/Jt6Xk0N.jpg">
+      <div class="info">Supreme Alchemy</div>
     </div>
-    <div class="cards">
-      <div class="card">
-        <img src="https://i.imgur.com/9XqK7YF.jpg" />
-        <div class="info">Episode 66<br/>Tales of Herding Gods</div>
-      </div>
-      <div class="card">
-        <img src="https://i.imgur.com/Jt6Xk0N.jpg" />
-        <div class="info">Episode 21<br/>Supreme Alchemy</div>
-      </div>
+  </div>
+</section><section class="section">
+  <div class="row">
+    <div class="title">Episode Terbaru</div>
+    <span>Jadwal</span>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <span class="badge">NEW</span>
+      <img src="https://i.imgur.com/2nCt3Sb.jpg">
+      <div class="info">Martial Peak<div class="episode">13 Episode</div></div>
     </div>
-  </div>  <div class="section">
-    <div class="row">
-      <div class="title">Episode Terbaru</div>
-      <span>Lihat Jadwal</span>
+    <div class="card">
+      <span class="badge">NEW</span>
+      <img src="https://i.imgur.com/8zQZ4FZ.jpg">
+      <div class="info">Soul Land<div class="episode">125 Episode</div></div>
     </div>
-    <div class="cards">
-      <div class="card">
-        <img src="https://i.imgur.com/2nCt3Sbl.jpg" />
-        <div class="info"><span class="badge">New</span><br/>13 Eps</div>
-      </div>
-      <div class="card">
-        <img src="https://i.imgur.com/8zQZ4FZl.jpg" />
-        <div class="info"><span class="badge">New</span><br/>125 Eps</div>
-      </div>
-      <div class="card">
-        <img src="https://i.imgur.com/5tj6S7Ol.jpg" />
-        <div class="info"><span class="badge">New</span><br/>49 Eps</div>
-      </div>
+    <div class="card">
+      <span class="badge">NEW</span>
+      <img src="https://i.imgur.com/5tj6S7O.jpg">
+      <div class="info">Battle Through Heavens<div class="episode">49 Episode</div></div>
     </div>
-  </div>  <nav>
-    <div class="active">Home</div>
-    <div>Schedule</div>
-    <div>Catalog</div>
-    <div>Library</div>
-    <div>Profile</div>
-  </nav></body>
-</html>y)?'':'none';});}
-
-    populateContent();
-</script>
-
-</body>
+  </div>
+</section><nav>
+  <div class="active">Home</div>
+  <div>Schedule</div>
+  <div>Catalog</div>
+  <div>Library</div>
+  <div>Profile</div>
+</nav></body>
 </html>
