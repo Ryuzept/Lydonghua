@@ -1,131 +1,226 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LYDONGHUA Web Platform</title>
-<script src="https://cdn.socket.io/4.7.1/socket.io.min.js"></script>
-<style>
-  body { font-family: Arial; background:#F8F7F4; color:#121212; margin:0; padding:0; transition: background 0.3s, color 0.3s;}
-  body.dark { background:#121212; color:#F8F7F4;}
-  header { background:#D4AF37; padding:10px; text-align:center; color:white;}
-  nav { display:flex; justify-content:center; gap:10px; margin:10px 0;}
-  nav button { padding:5px 10px; cursor:pointer;}
-  .tab { display:none; padding:10px;}
-  .active { display:block;}
-  video { width:100%; max-width:640px; margin:10px 0;}
-  #chat { max-height:200px; overflow-y:auto; border:1px solid #ccc; padding:5px; margin-top:10px;}
-  input, button { padding:5px;}
-  #darkToggle { position:absolute; top:10px; right:10px; cursor:pointer;}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime & Donghua Streaming</title>
+    <style>
+        /* Reset & Font */
+        body, html { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #0e0e0e; color: #ffffff; }
+        a { color: #FF4C00; text-decoration: none; }/* Navbar */
+    nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.8rem 2rem;
+        background-color: #1b1b1b;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+    }
+    nav .logo { font-size: 1.8rem; font-weight: bold; color: #FF4C00; }
+    nav .menu a { margin-left: 1.5rem; font-weight: 500; }
+
+    /* Hero Banner */
+    .hero {
+        margin-top: 70px;
+        height: 450px;
+        background: url('https://via.placeholder.com/1400x450') center/cover no-repeat;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        font-weight: bold;
+        text-shadow: 2px 2px 10px rgba(0,0,0,0.7);
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }
+
+    /* Section */
+    .section { padding: 2rem; }
+    .section h2 { margin-bottom: 1rem; color: #FF4C00; }
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+    .card {
+        background: #1f1f1f;
+        border-radius: 16px;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .card:hover { transform: scale(1.05); box-shadow: 0 0 20px #FF4C00; }
+    .card img { width: 100%; display: block; border-bottom: 1px solid #333; }
+    .card .title {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        font-weight: bold;
+        background: rgba(0,0,0,0.6);
+        padding: 0.3rem 0.5rem;
+        border-radius: 6px;
+        color: #fff;
+    }
+    .card button {
+        margin: 0.5rem;
+        padding: 0.5rem 0.8rem;
+        background-color: #FF4C00;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        color: #fff;
+        transition: background 0.3s;
+    }
+    .card button:hover { background-color: #FF7B50; }
+
+    /* Wallet / Koin */
+    .wallet {
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        background-color: #1b1b1b;
+        padding: 1rem;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    .wallet button { margin-top: 0.5rem; background-color: #FF4C00; }
+    .wallet button:hover { background-color: #FF7B50; }
+
+    /* Modal Login */
+    .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 1001; }
+    .modal-content { background:#2b2b2b; padding:2rem; border-radius:16px; width:320px; text-align:center; }
+    .modal input { width: 90%; padding:0.6rem; margin:0.5rem 0; border-radius:8px; border:none; }
+    .modal button { padding:0.5rem 1rem; background:#FF4C00; border:none; border-radius:8px; cursor:pointer; font-weight:bold; }
+    .modal button:hover { background:#FF7B50; }
+
+    /* Chat Box */
+    .chat-box { position: fixed; bottom: 0; right:0; width:320px; max-height:400px; background:#1b1b1b; border-top-left-radius:16px; border-top-right-radius:16px; display:flex; flex-direction: column; box-shadow: 0 -4px 12px rgba(0,0,0,0.5); }
+    .chat-messages { flex:1; padding:0.5rem; overflow-y:auto; }
+    .chat-input { display:flex; }
+    .chat-input input { flex:1; padding:0.5rem; border:none; border-radius:0 0 0 12px; }
+    .chat-input button { padding:0.5rem; border:none; border-radius:0 0 12px 0; background:#FF4C00; cursor:pointer; }
+    .chat-input button:hover { background:#FF7B50; }
+
+    footer { text-align:center; padding:2rem; background:#1b1b1b; margin-top:2rem; color:#888; }
 </style>
+
 </head>
-<body>
-
-<header>
-  <h1>LYDONGHUA Web Platform</h1>
-</header>
-
-<button id="darkToggle" onclick="toggleDark()">🌙</button>
-
-<nav>
-  <button onclick="showTab('home')">Home</button>
-  <button onclick="showTab('anime')">Anime</button>
-  <button onclick="showTab('donghua')">Donghua</button>
-  <button onclick="showTab('nobar')">Nobar</button>
-  <button onclick="showTab('account')">Account</button>
+<body><nav>
+    <div class="logo">DonghuaStream</div>
+    <div class="menu">
+        <a href="#">Home</a>
+        <a href="#anime">Anime</a>
+        <a href="#donghua">Donghua</a>
+        <a href="#nobar">Nobar</a>
+        <a href="#community">Community</a>
+        <a href="#profile" onclick="openLogin()">Login</a>
+    </div>
 </nav>
 
-<div id="home" class="tab active">
-  <h2>Home</h2>
-  <p>Selamat datang di LYDONGHUA Web!</p>
+<div class="hero">Nikmati Anime & Donghua Terbaru!</div>
+
+<div class="section" id="anime">
+    <h2>Anime Terbaru</h2>
+    <div class="grid">
+        <div class="card">
+            <img src="https://via.placeholder.com/200x300" alt="Anime 1">
+            <div class="title">Anime 1</div>
+            <button onclick="unlockEpisode(this)">Unlock Episode (50 Koin)</button>
+        </div>
+        <div class="card">
+            <img src="https://via.placeholder.com/200x300" alt="Anime 2">
+            <div class="title">Anime 2</div>
+            <button onclick="unlockEpisode(this)">Unlock Episode (50 Koin)</button>
+        </div>
+    </div>
 </div>
 
-<div id="anime" class="tab">
-  <h2>Anime</h2>
-  <ul id="anime-list"></ul>
+<div class="section" id="donghua">
+    <h2>Donghua Terbaru</h2>
+    <div class="grid">
+        <div class="card">
+            <img src="https://via.placeholder.com/200x300" alt="Donghua 1">
+            <div class="title">Donghua 1</div>
+            <button onclick="unlockEpisode(this)">Unlock Episode (50 Koin)</button>
+        </div>
+        <div class="card">
+            <img src="https://via.placeholder.com/200x300" alt="Donghua 2">
+            <div class="title">Donghua 2</div>
+            <button onclick="unlockEpisode(this)">Unlock Episode (50 Koin)</button>
+        </div>
+    </div>
 </div>
 
-<div id="donghua" class="tab">
-  <h2>Donghua</h2>
-  <ul id="donghua-list"></ul>
+<div class="wallet">
+    <div>Koin Anda: <span id="coinBalance">0</span></div>
+    <button onclick="earnCoins()">Tonton & Dapat Koin +10</button>
 </div>
 
-<div id="nobar" class="tab">
-  <h2>Nobar Room</h2>
-  <video id="video" controls>
-    <source src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" type="application/x-mpegURL">
-  </video>
-  <div>
-    <input type="text" id="chat-input" placeholder="Ketik pesan...">
-    <button onclick="sendChat()">Kirim</button>
-    <button onclick="sendGift()">🎁 Gift 10 koin</button>
-  </div>
-  <div id="chat"></div>
+<div class="modal" id="loginModal">
+    <div class="modal-content">
+        <h3>Login</h3>
+        <input type="text" placeholder="Username" id="username">
+        <input type="password" placeholder="Password" id="password">
+        <button onclick="login()">Login</button>
+    </div>
 </div>
 
-<div id="account" class="tab">
-  <h2>Account</h2>
-  <p>Nama: <span id="user-name">User</span></p>
-  <p>Koin: <span id="user-coin">100</span></p>
-  <button onclick="earnCoin()">+50 Koin</button>
+<div class="chat-box" id="chatBox">
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-input">
+        <input type="text" id="chatInput" placeholder="Ketik pesan...">
+        <button onclick="sendMessage()">Kirim</button>
+    </div>
 </div>
+
+<footer>&copy; 2026 DonghuaStream | Legal Streaming Only</footer>
 
 <script>
-// Dummy data
-const animeData = [{id:1,title:'Naruto'},{id:2,title:'One Piece'}];
-const donghuaData = [{id:1,title:'The King\'s Avatar'}];
-const episodesData = [
-  {id:1, content_id:1, episode_number:1, title:'Episode 1', video_url:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'},
-  {id:2, content_id:1, episode_number:2, title:'Episode 2', video_url:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'},
-  {id:3, content_id:2, episode_number:1, title:'Episode 1', video_url:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'}
-];
+    let coinBalance = 0;
 
-// Populate lists
-const animeList = document.getElementById('anime-list');
-animeData.forEach(a => animeList.innerHTML += `<li>${a.title}</li>`);
+    function openLogin() { document.getElementById('loginModal').style.display = 'flex'; }
 
-const donghuaList = document.getElementById('donghua-list');
-donghuaData.forEach(d => donghuaList.innerHTML += `<li>${d.title}</li>`);
+    function login() {
+        const username = document.getElementById('username').value;
+        if(username) { alert('Login sukses: ' + username); document.getElementById('loginModal').style.display = 'none'; }
+    }
 
-// Tab navigation
-function showTab(id){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
+    function sendMessage() {
+        const input = document.getElementById('chatInput');
+        const msg = input.value;
+        if(msg) {
+            const msgDiv = document.createElement('div');
+            msgDiv.textContent = msg;
+            document.getElementById('chatMessages').appendChild(msgDiv);
+            input.value = '';
+            document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+        }
+    }
 
-// Dark mode
-function toggleDark(){ document.body.classList.toggle('dark'); }
+    function earnCoins() {
+        coinBalance += 10;
+        document.getElementById('coinBalance').textContent = coinBalance;
+        alert('Koin +10! Total koin: ' + coinBalance);
+    }
 
-// Nobar & Socket.IO
-const socket = io("http://localhost:3000/nobar"); // backend Socket.IO harus aktif
-socket.on('connect', ()=>console.log('Connected to Nobar'));
-socket.on('chat_message', data=>{
-  const chatDiv = document.getElementById('chat');
-  chatDiv.innerHTML += `<p><b>${data.user}:</b> ${data.message}</p>`;
-  chatDiv.scrollTop = chatDiv.scrollHeight;
-});
-socket.on('gift_coin', data=>{
-  const chatDiv = document.getElementById('chat');
-  chatDiv.innerHTML += `<p><b>${data.from}</b> mengirim gift ${data.amount} koin 🎁</p>`;
-});
-
-// Chat & gift functions
-function sendChat(){
-  const input = document.getElementById('chat-input');
-  const msg = input.value;
-  if(msg) { socket.emit('chat_message', {user:'User', message:msg}); input.value=''; }
-}
-function sendGift(){
-  socket.emit('gift_coin', {from:'User', amount:10});
-  const coinsSpan = document.getElementById('user-coin');
-  coinsSpan.textContent = parseInt(coinsSpan.textContent)-10;
-}
-
-// Dummy account functions
-function earnCoin(){
-  const coinsSpan = document.getElementById('user-coin');
-  coinsSpan.textContent = parseInt(coinsSpan.textContent)+50;
-}
+    function unlockEpisode(button) {
+        const cost = 50;
+        if(coinBalance >= cost) {
+            coinBalance -= cost;
+            document.getElementById('coinBalance').textContent = coinBalance;
+            button.textContent = 'Episode Terbuka!';
+            button.disabled = true;
+            alert('Episode berhasil dibuka! Koin Anda tersisa: ' + coinBalance);
+        } else {
+            alert('Koin tidak cukup! Tonton lebih banyak untuk dapat koin.');
+        }
+    }
 </script>
 
 </body>
