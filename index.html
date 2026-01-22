@@ -1,114 +1,115 @@
-<!DOCTYPE html>
-<html lang="id">
+<!DOCTYPE html><html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <titl>Lydonghua</title>/title>
+  <title>Lydonghua</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; }
-    body { background: #0f1117; color: #fff; }
+    body { background: #0f1117; color: #fff; padding-bottom: 70px; }header {
+  background: #151823;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
 
-    header {
-      background: #151823;
-      padding: 15px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
+header h1 { color: #f5c97a; font-size: 20px; }
 
-    header h1 { color: #f5c97a; font-size: 22px; }
+nav { display: none; }
 
-    nav a {
-      color: #ccc;
-      margin-left: 20px;
-      text-decoration: none;
-      font-size: 14px;
-    }
-    nav a:hover { color: #fff; }
+.hero {
+  padding: 20px;
+  display: flex;
+  gap: 15px;
+}
 
-    .hero {
-      background: linear-gradient(135deg, #1b1f33, #0f1117);
-      padding: 40px 30px;
-      display: flex;
-      gap: 30px;
-    }
+.hero img {
+  width: 120px;
+  border-radius: 10px;
+}
 
-    .hero img {
-      width: 220px;
-      border-radius: 12px;
-    }
+.hero-info h2 { font-size: 18px; margin-bottom: 8px; }
+.hero-info p { color: #bbb; font-size: 13px; margin-bottom: 10px; }
 
-    .hero-info h2 { font-size: 26px; margin-bottom: 10px; }
-    .hero-info p { color: #bbb; margin-bottom: 15px; }
+.btn {
+  background: #f5c97a;
+  color: #000;
+  padding: 8px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 13px;
+}
 
-    .btn {
-      background: #f5c97a;
-      color: #000;
-      padding: 10px 18px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
-    }
+.section { padding: 20px; }
+.section h3 { margin-bottom: 10px; font-size: 16px; }
 
-    .section {
-      padding: 30px;
-    }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
 
-    .section h3 {
-      margin-bottom: 15px;
-      font-size: 20px;
-    }
+.card {
+  background: #151823;
+  border-radius: 10px;
+  overflow: hidden;
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: 20px;
-    }
+.card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
 
-    .card {
-      background: #151823;
-      border-radius: 10px;
-      overflow: hidden;
-      transition: transform 0.3s;
-    }
+.card .info { padding: 8px; }
+.card .info h4 { font-size: 12px; margin-bottom: 3px; }
+.card .info span { font-size: 11px; color: #aaa; }
 
-    .card:hover { transform: translateY(-5px); }
+footer {
+  background: #151823;
+  text-align: center;
+  padding: 10px;
+  font-size: 11px;
+  color: #777;
+}
 
-    .card img {
-      width: 100%;
-      height: 220px;
-      object-fit: cover;
-    }
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #151823;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-top: 1px solid #222;
+}
 
-    .card .info {
-      padding: 10px;
-    }
+.bottom-nav a {
+  color: #aaa;
+  text-decoration: none;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-    .card .info h4 {
-      font-size: 14px;
-      margin-bottom: 5px;
-    }
+.bottom-nav a.active { color: #f5c97a; }
 
-    .card .info span {
-      font-size: 12px;
-      color: #aaa;
-    }
+@media (min-width: 768px) {
+  nav { display: block; }
+  .bottom-nav { display: none; }
+  body { padding-bottom: 0; }
+}
 
-    footer {
-      background: #151823;
-      text-align: center;
-      padding: 15px;
-      font-size: 12px;
-      color: #777;
-    }
   </style>
 </head>
-<body>
-
-<header>
+<body><header>
   <h1>Lydonghua</h1>
   <nav>
     <a href="#">Home</a>
@@ -116,18 +117,31 @@
     <a href="#">Donghua</a>
     <a href="#">Jadwal</a>
   </nav>
-</header>
-
-<section class="hero">
-  <img src="https://share.google/images/W3T6LR9nFCYxI3X7Q">
+</header><section class="hero">
+  <img src="https://via.placeholder.com/220x320" alt="Featured">
   <div class="hero-info">
     <h2>Battle Through The Heavens</h2>
     <p>Donghua aksi fantasi dengan kultivasi, kekuatan dan pertarungan epik.</p>
-    <a class="btn" href="#">▶ Tonton Sekarang</a>
+    <a class="btn" href="#watch">▶ Tonton Sekarang</a>
   </div>
-</section>
-
-<section class="section">
+</section><!-- HALAMAN NONTON VIDEO --><section class="section" id="watch">
+  <h3>Nonton Episode</h3>
+  <div style="background:#000;border-radius:12px;overflow:hidden;margin-bottom:15px;">
+    <video controls width="100%" poster="https://via.placeholder.com/640x360">
+      <source src="sample.mp4" type="video/mp4">
+      Browser kamu tidak mendukung video.
+    </video>
+  </div>  <div style="margin-bottom:15px;">
+    <strong>Battle Through The Heavens</strong><br>
+    <span style="color:#aaa;font-size:13px;">Episode 1 • Donghua • Cultivation</span>
+  </div>  <h3>Daftar Episode</h3>
+  <div class="grid">
+    <div class="card"><div class="info"><h4>Episode 1</h4></div></div>
+    <div class="card"><div class="info"><h4>Episode 2</h4></div></div>
+    <div class="card"><div class="info"><h4>Episode 3</h4></div></div>
+    <div class="card"><div class="info"><h4>Episode 4</h4></div></div>
+  </div>
+</section><section class="section">
   <h3>Anime Terbaru</h3>
   <div class="grid">
     <div class="card">
@@ -145,9 +159,7 @@
       </div>
     </div>
   </div>
-</section>
-
-<section class="section">
+</section><section class="section">
   <h3>Donghua Populer</h3>
   <div class="grid">
     <div class="card">
@@ -165,12 +177,12 @@
       </div>
     </div>
   </div>
-</section>
-
-<footer>
+</section><footer>
   © 2026 Lydonghua • Streaming UI Concept
-</footer>
-
-</body>
-                              </html>
-                              
+</footer><div class="bottom-nav">
+  <a href="#" class="active">🏠<span>Home</span></a>
+  <a href="#">🎬<span>Anime</span></a>
+  <a href="#">🐉<span>Donghua</span></a>
+  <a href="#">📅<span>Jadwal</span></a>
+</div></body>
+</html>
