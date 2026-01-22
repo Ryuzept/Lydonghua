@@ -1,5 +1,10 @@
 <!DOCTYPE html><html lang="id">
 <head>
+<!-- GOOGLE ADSENSE (GANTI DENGAN PUNYA KAMU) -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+ (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Lydonghua</title><style>
@@ -47,9 +52,14 @@ nav button.active{color:var(--primary)}
 </style></head>
 <body><header>
  <div class="logo">Lydonghua</div>
+ <div>
+  <button class="btn" onclick="openLogin()">Login</button>
+  <button class="vip-btn" onclick="openVIP()">VIP</button>
+ </div>
+ <div class="logo">Lydonghua</div>
  <button class="vip-btn" onclick="openVIP()">VIP</button>
 </header><main id="home">
- <h3>Anime & Donghua Populer</h3>
+ <h3>Untuk Kamu</h3><div class="grid" id="recoGrid"></div><h3 style="margin-top:16px">Anime & Donghua Populer</h3>
  <div class="grid" id="homeGrid"></div>
 </main><main id="detail" class="hidden">
  <div class="hero" id="detailHero"></div>
@@ -61,8 +71,15 @@ nav button.active{color:var(--primary)}
   <div id="episodeList"></div>
  </div>
 </main><main id="player" class="hidden">
+ <div id="adBanner" style="background:#000;color:#fff;padding:8px;text-align:center">Iklan aktif untuk user gratis</div>
+ <div style="margin:10px 0">
+  <button class="btn" onclick="useExternal()">▶ Putar Langsung (External)</button>
+  <button class="btn" onclick="useLocal()">▶ Putar Lokal</button>
+ </div>
+ <iframe id="extFrame" class="hidden" style="width:100%;height:220px;border-radius:14px;border:none"></iframe>
  <video id="video" controls></video>
-</main><main id="genre" class="hidden"><h2>Genre</h2></main>
+ <button class="btn" style="margin-top:10px" onclick="openChat()">💬 Buka Chat</button>
+</main><main id="genre" class="hidden"><h2>Genre</h2><div id="genreList" class="grid"></div></main>
 <main id="account" class="hidden"><h2>Akun</h2></main>
 <main id="history" class="hidden"><h2>Riwayat</h2></main>
 <main id="rank" class="hidden"><h2>Peringkat</h2></main><nav>
@@ -74,11 +91,13 @@ nav button.active{color:var(--primary)}
 </nav><div id="vipModal" class="modal hidden">
  <div class="modal-card">
   <h3>Paket VIP</h3>
-  <button class="btn">VIP 1 Bulan</button>
-  <button class="btn">VIP 3 Bulan</button>
-  <button class="btn">VIP 12 Bulan</button>
+  <button class="btn" onclick="buyVIP(1)">VIP 1 Bulan – Rp15.000</button>
+  <button class="btn" onclick="buyVIP(3)">VIP 3 Bulan – Rp40.000</button>
+  <button class="btn" onclick="buyVIP(12)">VIP 12 Bulan – Rp120.000</button>
+  <p style="font-size:12px;color:var(--muted)">Pembayaran via QRIS / Dana / OVO</p>
   <button class="btn" onclick="closeVIP()">Tutup</button>
  </div>
+</div>
 </div><div class="theme-fab" id="themeFab">
  <div class="theme-panel">
   <button class="theme-btn" style="background:#8b5cf6" onclick="setTheme('#8b5cf6')"></button>
@@ -111,12 +130,214 @@ function openDetail(s){
  for(let i=s.eps;i>=1;i--)episodeList.innerHTML+=`<div class="episode" onclick="playEpisode(${i})">Episode ${i}</div>`
 }
 
-function playEpisode(ep){show('player');video.src='https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'}
+function playEpisode(ep){
+ show('player');
+ const u=JSON.parse(localStorage.getItem('user'));
+ const isVIP=u&&u.vip;
+ if(isVIP){
+  document.getElementById('adBanner').style.display='none';
+ }else{
+  document.getElementById('adBanner').style.display='block';
+ }
+ // SIMPAN RIWAYAT
+ const h=JSON.parse(localStorage.getItem('history')||'[]');
+ h.push(detailTitle.innerText);
+ localStorage.setItem('history',JSON.stringify(h.slice(-20)));
+ // LOCK EPISODE VIP (EPISODE 6+)
+ if(ep>=6 && !isVIP){
+  alert('Episode ini VIP. Kamu tetap bisa nonton versi standar.');
+ }
+ const query=encodeURIComponent(detailTitle.innerText+' episode '+ep);
+ useExternal();
+ extFrame.src=`https://www.youtube.com/embed?listType=search&list=${query}`;
+}else{
+   document.getElementById('adBanner').style.display='block';
+ }
+ // AUTO EMBED EPISODE (YOUTUBE OFFICIAL)
+ const query=encodeURIComponent(detailTitle.innerText+' episode '+ep);
+ useExternal();
+ extFrame.src=`https://www.youtube.com/embed?listType=search&list=${query}`;
+}
+}(ep){
+ // user non VIP tetap bisa nonton
+ show('player');
+ // contoh aturan: episode VIP mulai dari 5
+ if(ep>=5 && user && !user.vip){
+   alert('Episode ini VIP, tapi kamu tetap bisa nonton versi standar');
+ }
+ video.src='https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8';
+}
 
 function show(id){document.querySelectorAll('main').forEach(m=>m.classList.add('hidden'));document.getElementById(id).classList.remove('hidden')}
 function openVIP(){vipModal.classList.remove('hidden')}
 function closeVIP(){vipModal.classList.add('hidden')}
 function toggleTheme(){themeFab.classList.toggle('open')}
 function setTheme(p){document.documentElement.style.setProperty('--primary',p)}
+</script><!-- LOGIN MODAL --><div id="loginModal" class="modal hidden">
+ <div class="modal-card">
+  <h3>Login Akun</h3>
+  <input id="email" placeholder="Email" style="width:100%;padding:8px">
+  <input id="password" type="password" placeholder="Password" style="width:100%;padding:8px;margin-top:8px">
+  <button class="btn" onclick="login()">Login</button>
+  <button class="btn" onclick="closeLogin()">Tutup</button>
+ </div>
+</div><script>
+// LOGIN SYSTEM
+let user=null
+function openLogin(){loginModal.classList.remove('hidden')}
+function closeLogin(){loginModal.classList.add('hidden')}
+function login(){user={email:email.value,vip:false};localStorage.setItem('user',JSON.stringify(user));closeLogin();alert('Login berhasil')}
+
+// VIP PAYMENT MOCK
+function buyVIP(month){user.vip=true;localStorage.setItem('user',JSON.stringify(user));alert('VIP '+month+' aktif')}
+
+// AUTO ANIME & DONGHUA (HUNDREDS VIA API)
+let page=1;const LIMIT_PAGES=5; // ~125 anime (5x25)
+function loadAnime(){
+ if(page>LIMIT_PAGES) return;
+ fetch(`https://api.jikan.moe/v4/top/anime?page=${page}`)
+  .then(r=>r.json()).then(d=>{
+   d.data.forEach(a=>{
+ addToGenre(a);
+    const c=document.createElement('div');c.className='card'
+    c.innerHTML=`<img src="${a.images.jpg.image_url}"><div class="title">${a.title}</div>`
+    c.onclick=()=>openDetail({title:a.title,eps:a.episodes||1,poster:a.images.jpg.image_url})
+    homeGrid.appendChild(c)
+   })
+   page++; loadAnime();
+
+// ===== REKOMENDASI OTOMATIS (UNTUK KAMU) =====
+const recoGrid=document.getElementById('recoGrid');
+function renderReco(){
+ const h=JSON.parse(localStorage.getItem('history')||'[]');
+ if(h.length===0) return;
+ recoGrid.innerHTML='';
+ const keywords=h.slice(-3);
+ fetch('https://api.jikan.moe/v4/anime?q='+encodeURIComponent(keywords[0])+'&limit=6')
+  .then(r=>r.json()).then(d=>{
+   d.data.forEach(a=>{
+    const c=document.createElement('div');c.className='card';
+    c.innerHTML=`<img src="${a.images.jpg.image_url}"><div class="title">${a.title}</div>`;
+    c.onclick=()=>openDetail({title:a.title,eps:a.episodes||1,poster:a.images.jpg.image_url});
+    recoGrid.appendChild(c);
+   })
+  })
+}
+setTimeout(renderReco,2000);
+
+// ===== GENRE SYSTEM OTOMATIS =====
+const genreMap={};
+function addToGenre(anime){
+ if(!anime.genres) return;
+ anime.genres.forEach(g=>{
+  if(!genreMap[g.name]) genreMap[g.name]=[];
+  genreMap[g.name].push(anime);
+ });
+ renderGenres();
+}
+function renderGenres(){
+ const gl=document.getElementById('genreList');
+ if(!gl) return;
+ gl.innerHTML='';
+ Object.keys(genreMap).forEach(name=>{
+  const c=document.createElement('div');c.className='card';
+  c.innerHTML=`<div class="title">${name} (${genreMap[name].length})</div>`;
+  c.onclick=()=>{
+    homeGrid.innerHTML='';
+    genreMap[name].forEach(a=>{
+      const cc=document.createElement('div');cc.className='card';
+      cc.innerHTML=`<img src="${a.images.jpg.image_url}"><div class="title">${a.title}</div>`;
+      cc.onclick=()=>openDetail({title:a.title,eps:a.episodes||1,poster:a.images.jpg.image_url});
+      homeGrid.appendChild(cc);
+    });
+    show('home');
+  }
+  gl.appendChild(c);
+ });
+}
+ // auto load next page
+  })
+}
+loadAnime();
+
+// DONGHUA (SAMPLE DATASET – EXTENDABLE)
+const donghua=[
+ {title:'Soul Land',eps:250,poster:'https://cdn.myanimelist.net/images/anime/1888/121710.jpg'},
+ {title:'Battle Through the Heavens',eps:400,poster:'https://cdn.myanimelist.net/images/anime/1065/118713.jpg'},
+ {title:'Perfect World',eps:200,poster:'https://cdn.myanimelist.net/images/anime/1536/117017.jpg'}
+]
+donghua.forEach(s=>{const c=document.createElement('div');c.className='card';c.innerHTML=`<img src="${s.poster}"><div class="title">${s.title}</div>`;c.onclick=()=>openDetail(s);homeGrid.appendChild(c)}))
+
+// BASIC ANTI DOWNLOAD
+window.oncontextmenu=()=>false
+document.addEventListener('keydown',e=>{if(e.ctrlKey&&['s','u','c'].includes(e.key))e.preventDefault()})
+</script><!-- CHAT MODAL --><div id="chatModal" class="modal hidden">
+ <div class="modal-card" style="max-width:420px">
+  <h3>Live Chat</h3>
+  <div id="chatBox" style="height:220px;overflow:auto;background:#000;padding:8px;border-radius:10px"></div>
+  <input id="chatInput" placeholder="Tulis pesan..." style="width:100%;padding:8px;margin-top:8px" />
+  <button class="btn" onclick="sendChat()">Kirim</button>
+  <button class="btn" onclick="closeChat()">Tutup</button>
+ </div>
+</div><script>
+// ===== EXTERNAL STREAMING (TANPA HOST VIDEO) =====
+function useExternal(){
+ video.classList.add('hidden');
+ extFrame.classList.remove('hidden');
+}
+function useLocal(){
+ extFrame.classList.add('hidden');
+ video.classList.remove('hidden');
+ video.src='https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8';
+}
+
+// ===== CHAT REALTIME (FIREBASE READY) =====
+// Versi produksi: ganti localStorage dengan Firebase Firestore / Realtime DB
+// Placeholder aktif agar web tetap jalan tanpa backend
+
+const chatKey='ly_chat';
+function openChat(){chatModal.classList.remove('hidden');renderChat()}
+function closeChat(){chatModal.classList.add('hidden')}
+function sendChat(){
+ const msg=chatInput.value.trim(); if(!msg) return;
+ const u=JSON.parse(localStorage.getItem('user')||'{}');
+ const data=JSON.parse(localStorage.getItem(chatKey)||'[]');
+ data.push({name:u.email||'Guest',msg,time:Date.now()});
+ localStorage.setItem(chatKey,JSON.stringify(data));
+ chatInput.value=''; renderChat();
+}
+function renderChat(){
+ const data=JSON.parse(localStorage.getItem(chatKey)||'[]');
+ chatBox.innerHTML='';
+ data.slice(-100).forEach(c=>{
+  const d=document.createElement('div');
+  d.innerHTML=`<b>${c.name}</b>: ${c.msg}`;
+  chatBox.appendChild(d);
+ });
+ chatBox.scrollTop=chatBox.scrollHeight;
+}
+
+// ===== VIDEO SOURCE API (READY) =====
+// Gunakan API legal / partner
+// Contoh struktur API:
+// GET /api/stream?id=animeId -> return embedUrl
+function loadFromAPI(embedUrl){
+ extFrame.classList.remove('hidden');
+ video.classList.add('hidden');
+ extFrame.src=embedUrl;
+}
+
+// ===== REKOMENDASI OTOMATIS =====
+function recommend(){
+ const genres=JSON.parse(localStorage.getItem('history')||'[]');
+ if(genres.includes('action')){
+  console.log('Rekomendasi: Action & Donghua Cultivation');
+ }
+}
+</b>: ${c.msg}`;
+  chatBox.appendChild(d);
+ });
+ chatBox.scrollTop=chatBox.scrollHeight;
+}
 </script></body>
 </html>
