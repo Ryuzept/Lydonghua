@@ -1,122 +1,97 @@
 <!DOCTYPE html><html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ZERO Anime</title>
-  <style>
-    :root{
-      --bg:#0a0a0f;
-      --card:#14141d;
-      --card-soft:#1b1b26;
-      --primary:#8b5cf6;
-      --primary-soft:#a78bfa;
-      --text:#ffffff;
-      --muted:#9ca3af;
-    }
-    *{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
-    body{margin:0;background:var(--bg);color:var(--text)}
-    img{display:block}/* HEADER */
-header{display:flex;align-items:center;justify-content:space-between;padding:16px}
-.user{display:flex;gap:12px;align-items:center}
-.avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#ec4899)}
-.welcome{font-size:13px;color:var(--muted)}
-.username{font-weight:700;letter-spacing:.5px}
-.search{font-size:20px;color:var(--primary)}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZERO Anime Universe</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+ --bg:#07070c;
+ --bg2:#0d0d18;
+ --card:#141426;
+ --glass:rgba(255,255,255,.06);
+ --primary:#8b5cf6;
+ --accent:#ec4899;
+ --text:#ffffff;
+ --muted:#a1a1aa;
+}
+*{box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{margin:0;background:radial-gradient(circle at top,#151530,#07070c);color:var(--text)}/* HEADER */ header{padding:18px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(180deg,#0f0f25,transparent)} .brand{font-size:22px;font-weight:700;letter-spacing:1px;background:linear-gradient(90deg,var(--primary),var(--accent));-webkit-background-clip:text;color:transparent}
 
-/* SECTION */
-.section{padding:0 16px 22px}
-.title{font-size:20px;font-weight:700;margin-bottom:12px}
-.row{display:flex;justify-content:space-between;align-items:center}
-.row span{color:var(--primary);font-size:13px}
+/* HERO */ .hero{margin:16px;border-radius:28px;overflow:hidden;position:relative;height:260px} .hero img{width:100%;height:100%;object-fit:cover;filter:brightness(.7)} .hero .overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent,#07070c)} .hero .content{position:absolute;bottom:20px;left:20px} .hero h1{margin:0;font-size:28px} .hero p{font-size:14px;color:#e5e7eb} .hero button{margin-top:10px;padding:10px 18px;border:none;border-radius:14px;background:linear-gradient(90deg,var(--primary),var(--accent));color:white;font-weight:600}
 
-/* ANNOUNCEMENT */
-.announcement{background:linear-gradient(135deg,#1f1f2e,#14141d);padding:16px;border-radius:16px;font-size:14px;color:#d1d5db}
+/* SECTION */ .section{padding:0 18px 26px} .section-title{font-size:22px;font-weight:700;margin-bottom:14px}
 
-/* GENRE */
-.genres{display:flex;gap:10px;overflow-x:auto}
-.genre{padding:10px 18px;border-radius:999px;background:var(--card-soft);color:var(--primary-soft);font-size:14px;white-space:nowrap}
+/* CARDS */ .cards{display:flex;gap:18px;overflow-x:auto} .card{min-width:170px;border-radius:22px;overflow:hidden;background:linear-gradient(180deg,#1a1a3a,#0f0f1f);box-shadow:0 20px 40px rgba(0,0,0,.6);position:relative} .card img{width:100%;height:240px;object-fit:cover} .card .info{padding:14px} .card .info h3{margin:0;font-size:15px} .badge{position:absolute;top:12px;left:12px;background:linear-gradient(90deg,var(--primary),var(--accent));padding:6px 12px;border-radius:999px;font-size:11px;font-weight:600}
 
-/* CARDS */
-.cards{display:flex;gap:14px;overflow-x:auto}
-.card{min-width:150px;background:var(--card);border-radius:18px;overflow:hidden;position:relative}
-.card img{width:100%;height:220px;object-fit:cover}
-.card .info{padding:10px;font-size:14px}
-.episode{font-size:12px;color:var(--muted)}
-.badge{position:absolute;top:10px;left:10px;background:var(--primary);padding:4px 10px;border-radius:10px;font-size:11px;font-weight:600}
+/* GRID */ .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
 
-/* BOTTOM NAV */
-nav{position:fixed;bottom:0;left:0;right:0;background:#0e0e15;border-top:1px solid #1f1f2e;display:flex;justify-content:space-around;padding:10px 0}
-nav div{font-size:12px;color:var(--muted)}
-nav .active{color:var(--primary)}
+/* PLAYER */ .player{margin:18px;border-radius:26px;overflow:hidden;background:black;box-shadow:0 20px 50px rgba(0,0,0,.8)} video{width:100%;height:240px}
 
-  </style>
+/* NAV */ nav{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,25,.8);backdrop-filter:blur(20px);display:flex;justify-content:space-around;padding:14px 0;border-top:1px solid rgba(255,255,255,.05)} nav div{font-size:12px;color:var(--muted)} nav .active{color:var(--primary)} </style>
+
 </head>
 <body><header>
-  <div class="user">
-    <div class="avatar"></div>
-    <div>
-      <div class="welcome">Welcome</div>
-      <div class="username">ZERO</div>
-    </div>
+  <div class="brand">ZERO ANIME</div>
+  <div style="display:flex;gap:14px;align-items:center">
+    <div id="coin">🪙 120</div>
+    <div id="vip" style="background:linear-gradient(90deg,var(--primary),var(--accent));padding:4px 10px;border-radius:999px;font-size:12px">VIP</div>
+    <div id="searchBtn">🔍</div>
+    <div onclick="openProfile()">👤</div>
   </div>
-  <div class="search">🔍</div>
-</header><section class="section">
-  <div class="title">Pengumuman</div>
-  <div class="announcement">Kami terus meningkatkan kualitas streaming anime & donghua. Terima kasih atas dukunganmu ✨</div>
-</section><section class="section">
-  <div class="title">Semua Genre</div>
-  <div class="genres">
-    <div class="genre">Anime</div>
-    <div class="genre">Donghua</div>
-    <div class="genre">Action</div>
-    <div class="genre">Fantasy</div>
-    <div class="genre">Romance</div>
-    <div class="genre">Cultivation</div>
+</header><div class="hero">
+  <img src="https://i.imgur.com/8zQZ4FZ.jpg">
+  <div class="overlay"></div>
+  <div class="content">
+    <h1>Soul Land</h1>
+    <p>Donghua terpopuler minggu ini</p>
+    <button>▶ Tonton Sekarang</button>
   </div>
-</section><section class="section">
-  <div class="row">
-    <div class="title">Lanjutkan Nonton</div>
-    <span>History</span>
-  </div>
+</div><section class="section">
+  <div class="section-title">Trending</div>
   <div class="cards">
-    <div class="card">
-      <span class="badge">EP 66</span>
-      <img src="https://i.imgur.com/9XqK7YF.jpg">
-      <div class="info">Tales of Herding Gods</div>
-    </div>
-    <div class="card">
-      <span class="badge">EP 21</span>
-      <img src="https://i.imgur.com/Jt6Xk0N.jpg">
-      <div class="info">Supreme Alchemy</div>
-    </div>
+    <div class="card"><span class="badge">HOT</span><img src="https://i.imgur.com/5tj6S7O.jpg"><div class="info"><h3>BTTH</h3></div></div>
+    <div class="card"><span class="badge">NEW</span><img src="https://i.imgur.com/9XqK7YF.jpg"><div class="info"><h3>Herding Gods</h3></div></div>
   </div>
 </section><section class="section">
-  <div class="row">
-    <div class="title">Episode Terbaru</div>
-    <span>Jadwal</span>
+  <div class="section-title">Catalog</div>
+  <div class="grid">
+    <div class="card"><img src="https://i.imgur.com/Jt6Xk0N.jpg"><div class="info"><h3>Supreme Alchemy</h3></div></div>
+    <div class="card"><img src="https://i.imgur.com/2nCt3Sb.jpg"><div class="info"><h3>Martial Peak</h3></div></div>
   </div>
-  <div class="cards">
-    <div class="card">
-      <span class="badge">NEW</span>
-      <img src="https://i.imgur.com/2nCt3Sb.jpg">
-      <div class="info">Martial Peak<div class="episode">13 Episode</div></div>
-    </div>
-    <div class="card">
-      <span class="badge">NEW</span>
-      <img src="https://i.imgur.com/8zQZ4FZ.jpg">
-      <div class="info">Soul Land<div class="episode">125 Episode</div></div>
-    </div>
-    <div class="card">
-      <span class="badge">NEW</span>
-      <img src="https://i.imgur.com/5tj6S7O.jpg">
-      <div class="info">Battle Through Heavens<div class="episode">49 Episode</div></div>
-    </div>
-  </div>
+</section><section class="section">
+  <div class="section-title">Now Playing</div>
+  <div class="player"><video controls></video></div>
 </section><nav>
   <div class="active">Home</div>
   <div>Schedule</div>
   <div>Catalog</div>
   <div>Library</div>
   <div>Profile</div>
-</nav></body>
+</nav><!-- SEARCH MODAL --><div class="modal" id="searchModal">
+  <div class="modal-box">
+    <h3>Cari Anime</h3>
+    <input id="searchInput" placeholder="Ketik judul anime...">
+    <button onclick="doSearch()">Cari</button>
+  </div>
+</div><!-- PROFILE MODAL --><div class="modal" id="profileModal">
+  <div class="modal-box">
+    <h3>Profil Akun</h3>
+    <input placeholder="Nama Pengguna" value="ZERO">
+    <button onclick="switchAccount()">Ganti Akun</button>
+    <button onclick="reloadSite()" style="margin-top:10px;background:#374151">Reload Website</button>
+  </div>
+</div><script>
+function openProfile(){document.getElementById('profileModal').style.display='flex'}
+function switchAccount(){alert('Ganti akun berhasil (demo)')}
+function reloadSite(){location.reload()}
+
+document.getElementById('searchBtn').onclick=()=>{
+ document.getElementById('searchModal').style.display='flex'
+}
+function doSearch(){
+ const q=document.getElementById('searchInput').value
+ alert('Mencari: '+q)
+}
+</script></body>
 </html>
