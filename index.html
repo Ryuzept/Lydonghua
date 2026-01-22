@@ -63,7 +63,7 @@ nav button.active{color:var(--primary)}
   <div id="chatBox" style="height:200px;overflow:auto;background:#000;padding:8px;border-radius:8px"></div>
   <input id="chatInput" placeholder="Pesan..." style="width:100%;padding:6px;margin-top:6px" />
   <button class="btn" onclick="sendChat()">Kirim</button>
-  <button class="btn" onclick="toggleChat()">Tutup</button>
+  <button class="btn" onclick="closeChat()">Tutup</button>
  </div>
 </div><script>
 let coin=100;
@@ -80,7 +80,8 @@ function playEpisode(ep){if(coin<=0){alert('Koin habis');return;}coin--;document
 function show(id){document.querySelectorAll('main').forEach(m=>m.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
 function doSearch(){const q=search.value.toLowerCase();render(series.filter(s=>s.title.toLowerCase().includes(q)));}
 // chat
-function toggleChat(){chatModal.classList.toggle('hidden');renderChat();}
+function toggleChat(){chatModal.classList.remove('hidden');renderChat();}
+function closeChat(){document.getElementById('chatModal').classList.add('hidden');}
 const chatKey='ly_chat';
 function sendChat(){const msg=chatInput.value.trim();if(!msg)return;const data=JSON.parse(localStorage.getItem(chatKey)||'[]');data.push({msg});localStorage.setItem(chatKey,JSON.stringify(data));chatInput.value='';renderChat();}
 function renderChat(){const data=JSON.parse(localStorage.getItem(chatKey)||'[]');chatBox.innerHTML='';data.slice(-50).forEach(c=>{const d=document.createElement('div');d.textContent=c.msg;chatBox.appendChild(d);});}
