@@ -2,12 +2,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anime & Donghua Streaming</title>
+    <title>DonghuaStream</title>
     <style>
-        /* Reset & Font */
-        body, html { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #0e0e0e; color: #ffffff; }
-        a { color: #FF4C00; text-decoration: none; }/* Navbar */
-    nav {
+        body, html { margin:0; padding:0; font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #0e0e0e; color: #ffffff; transition: background 0.3s, color 0.3s; }
+        a { color: #FF4C00; text-decoration: none; }nav {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -22,7 +20,6 @@
     nav .logo { font-size: 1.8rem; font-weight: bold; color: #FF4C00; }
     nav .menu a { margin-left: 1.5rem; font-weight: 500; }
 
-    /* Hero Banner */
     .hero {
         margin-top: 70px;
         height: 450px;
@@ -37,7 +34,14 @@
         border-bottom-right-radius: 20px;
     }
 
-    /* Section */
+    .search-bar {
+        margin: 1rem 2rem;
+        display: flex;
+    }
+    .search-bar input { flex:1; padding:0.6rem; border-radius:8px 0 0 8px; border:none; }
+    .search-bar button { padding:0.6rem 1rem; border:none; background:#FF4C00; color:#fff; border-radius:0 8px 8px 0; cursor:pointer; }
+    .search-bar button:hover { background:#FF7B50; }
+
     .section { padding: 2rem; }
     .section h2 { margin-bottom: 1rem; color: #FF4C00; }
     .grid {
@@ -78,7 +82,6 @@
     }
     .card button:hover { background-color: #FF7B50; }
 
-    /* Wallet / Koin */
     .wallet {
         position: fixed;
         top: 80px;
@@ -92,20 +95,24 @@
     .wallet button { margin-top: 0.5rem; background-color: #FF4C00; }
     .wallet button:hover { background-color: #FF7B50; }
 
-    /* Modal Login */
     .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 1001; }
     .modal-content { background:#2b2b2b; padding:2rem; border-radius:16px; width:320px; text-align:center; }
     .modal input { width: 90%; padding:0.6rem; margin:0.5rem 0; border-radius:8px; border:none; }
     .modal button { padding:0.5rem 1rem; background:#FF4C00; border:none; border-radius:8px; cursor:pointer; font-weight:bold; }
     .modal button:hover { background:#FF7B50; }
 
-    /* Chat Box */
     .chat-box { position: fixed; bottom: 0; right:0; width:320px; max-height:400px; background:#1b1b1b; border-top-left-radius:16px; border-top-right-radius:16px; display:flex; flex-direction: column; box-shadow: 0 -4px 12px rgba(0,0,0,0.5); }
     .chat-messages { flex:1; padding:0.5rem; overflow-y:auto; }
     .chat-input { display:flex; }
     .chat-input input { flex:1; padding:0.5rem; border:none; border-radius:0 0 0 12px; }
     .chat-input button { padding:0.5rem; border:none; border-radius:0 0 12px 0; background:#FF4C00; cursor:pointer; }
     .chat-input button:hover { background:#FF7B50; }
+
+    /* Bottom Buttons */
+    .bottom-buttons { position: fixed; bottom: 10px; width: 100%; display: flex; justify-content: space-between; padding: 0 2rem; z-index:1002; }
+    .bottom-buttons .left, .bottom-buttons .center, .bottom-buttons .right { display:flex; gap: 0.8rem; }
+    .bottom-buttons button { padding:0.5rem 1rem; border:none; border-radius:8px; background:#FF4C00; color:#fff; cursor:pointer; font-weight:bold; transition: background 0.3s; }
+    .bottom-buttons button:hover { background:#FF7B50; }
 
     footer { text-align:center; padding:2rem; background:#1b1b1b; margin-top:2rem; color:#888; }
 </style>
@@ -114,47 +121,25 @@
 <body><nav>
     <div class="logo">DonghuaStream</div>
     <div class="menu">
-        <a href="#">Home</a>
-        <a href="#anime">Anime</a>
-        <a href="#donghua">Donghua</a>
-        <a href="#nobar">Nobar</a>
-        <a href="#community">Community</a>
-        <a href="#profile" onclick="openLogin()">Login</a>
+        <a href="#" onclick="openLogin()">Login</a>
     </div>
 </nav>
+
+<div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Cari Anime / Donghua...">
+    <button onclick="searchContent()">Cari</button>
+</div>
 
 <div class="hero">Nikmati Anime & Donghua Terbaru!</div>
 
 <div class="section" id="anime">
     <h2>Anime Terbaru</h2>
-    <div class="grid">
-        <div class="card">
-            <img src="https://via.placeholder.com/200x300" alt="Anime 1">
-            <div class="title">Anime 1</div>
-            <button onclick="unlockEpisode(this)">Unlock Episode (50 Koin)</button>
-        </div>
-        <div class="card">
-            <img src="https://via.placeholder.com/200x300" alt="Anime 2">
-            <div class="title">Anime 2</div>
-            <button onclick="unlockEpisode(this)">Unlock Episode (50 Koin)</button>
-        </div>
-    </div>
+    <div class="grid" id="animeGrid"></div>
 </div>
 
 <div class="section" id="donghua">
     <h2>Donghua Terbaru</h2>
-    <div class="grid">
-        <div class="card">
-            <img src="https://via.placeholder.com/200x300" alt="Donghua 1">
-            <div class="title">Donghua 1</div>
-            <button onclick="unlockEpisode(this)">Unlock Episode (50 Koin)</button>
-        </div>
-        <div class="card">
-            <img src="https://via.placeholder.com/200x300" alt="Donghua 2">
-            <div class="title">Donghua 2</div>
-            <button onclick="unlockEpisode(this)">Unlock Episode (50 Koin)</button>
-        </div>
-    </div>
+    <div class="grid" id="donghuaGrid"></div>
 </div>
 
 <div class="wallet">
@@ -179,48 +164,61 @@
     </div>
 </div>
 
+<div class="bottom-buttons">
+    <div class="left"><button onclick="scrollToSection('anime')">Anime</button><button onclick="scrollToSection('donghua')">Donghua</button></div>
+    <div class="center"><button onclick="scrollToTop()">Home</button></div>
+    <div class="right"><button onclick="openLogin()">Akun Saya</button><button onclick="toggleTheme()">Ganti Tema</button></div>
+</div>
+
 <footer>&copy; 2026 DonghuaStream | Legal Streaming Only</footer>
 
 <script>
     let coinBalance = 0;
+    const animeList = ['Anime 1','Anime 2','Anime 3','Anime 4','Anime 5','Anime 6'];
+    const donghuaList = ['Donghua 1','Donghua 2','Donghua 3','Donghua 4','Donghua 5','Donghua 6'];
+
+    function populateContent() {
+        const animeGrid = document.getElementById('animeGrid');
+        animeGrid.innerHTML = '';
+        animeList.forEach(title => {
+            const div = document.createElement('div');
+            div.className = 'card';
+            div.innerHTML = `<img src='https://via.placeholder.com/200x300'><div class='title'>${title}</div><button onclick='unlockEpisode(this)'>Unlock Episode (50 Koin)</button>`;
+            animeGrid.appendChild(div);
+        });
+
+        const donghuaGrid = document.getElementById('donghuaGrid');
+        donghuaGrid.innerHTML = '';
+        donghuaList.forEach(title => {
+            const div = document.createElement('div');
+            div.className = 'card';
+            div.innerHTML = `<img src='https://via.placeholder.com/200x300'><div class='title'>${title}</div><button onclick='unlockEpisode(this)'>Unlock Episode (50 Koin)</button>`;
+            donghuaGrid.appendChild(div);
+        });
+    }
+
+    function scrollToSection(id) { document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
+    function scrollToTop() { window.scrollTo({top:0, behavior:'smooth'}); }
 
     function openLogin() { document.getElementById('loginModal').style.display = 'flex'; }
+    function login() { const username = document.getElementById('username').value; if(username){ alert('Login sukses: '+username); document.getElementById('loginModal').style.display='none'; } }
 
-    function login() {
-        const username = document.getElementById('username').value;
-        if(username) { alert('Login sukses: ' + username); document.getElementById('loginModal').style.display = 'none'; }
-    }
+    function sendMessage() { const input=document.getElementById('chatInput'); const msg=input.value; if(msg){ const div=document.createElement('div'); div.textContent=msg; document.getElementById('chatMessages').appendChild(div); input.value=''; document.getElementById('chatMessages').scrollTop=document.getElementById('chatMessages').scrollHeight;} }
+    function earnCoins(){ coinBalance+=10; document.getElementById('coinBalance').textContent=coinBalance; alert('Koin +10! Total koin: '+coinBalance);} 
+    function unlockEpisode(button){ const cost=50; if(coinBalance>=cost){ coinBalance-=cost; document.getElementById('coinBalance').textContent=coinBalance; button.textContent='Episode Terbuka!'; button.disabled=true; alert('Episode berhasil dibuka! Koin tersisa: '+coinBalance);}else{ alert('Koin tidak cukup! Tonton lebih banyak untuk dapat koin.');}}
 
-    function sendMessage() {
-        const input = document.getElementById('chatInput');
-        const msg = input.value;
-        if(msg) {
-            const msgDiv = document.createElement('div');
-            msgDiv.textContent = msg;
-            document.getElementById('chatMessages').appendChild(msgDiv);
-            input.value = '';
-            document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
-        }
-    }
+    let themeIndex = 0;
+    const themes = [
+        {bg:'#0e0e0e', text:'#ffffff'},
+        {bg:'#f0f0f0', text:'#000000'},
+        {bg:'#001f3f', text:'#ffffff'},
+        {bg:'#2e1b2f', text:'#ffccff'}
+    ];
+    function toggleTheme(){ themeIndex=(themeIndex+1)%themes.length; document.body.style.background=themes[themeIndex].bg; document.body.style.color=themes[themeIndex].text; }
 
-    function earnCoins() {
-        coinBalance += 10;
-        document.getElementById('coinBalance').textContent = coinBalance;
-        alert('Koin +10! Total koin: ' + coinBalance);
-    }
+    function searchContent(){ const query=document.getElementById('searchInput').value.toLowerCase(); animeList.forEach((title,i)=>{document.getElementById('animeGrid').children[i].style.display=title.toLowerCase().includes(query)?'':'none';}); donghuaList.forEach((title,i)=>{document.getElementById('donghuaGrid').children[i].style.display=title.toLowerCase().includes(query)?'':'none';});}
 
-    function unlockEpisode(button) {
-        const cost = 50;
-        if(coinBalance >= cost) {
-            coinBalance -= cost;
-            document.getElementById('coinBalance').textContent = coinBalance;
-            button.textContent = 'Episode Terbuka!';
-            button.disabled = true;
-            alert('Episode berhasil dibuka! Koin Anda tersisa: ' + coinBalance);
-        } else {
-            alert('Koin tidak cukup! Tonton lebih banyak untuk dapat koin.');
-        }
-    }
+    populateContent();
 </script>
 
 </body>
