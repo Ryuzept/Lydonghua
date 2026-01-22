@@ -1,81 +1,183 @@
-<!DOCTYPE html><html lang="id">
+<!DOCTYPE html>
+<html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Lydonghua</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StreamDong - Nonton Anime & Donghua</title>
+
 <style>
-:root{
- --primary:#8b5cf6;
- --bg:#0b0b10;
- --surface:#16161f;
- --text:#ffffff;
- --muted:#b5b5c0;
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#0f0f1a;color:#fff}
+
+/* NAVBAR */
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 30px;
+background:#121225;
+position:sticky;
+top:0;
+z-index:10
 }
-*{box-sizing:border-box}
-body{margin:0;font-family:system-ui;background:var(--bg);color:var(--text)}
-.hidden{display:none}
-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#000;position:sticky;top:0;z-index:99}
-.logo{font-weight:800;font-size:20px;color:var(--primary)}
-.btn{background:var(--primary);color:#fff;border:none;border-radius:12px;padding:8px 12px;font-weight:600}
-.coin{background:gold;color:#000;border-radius:12px;padding:6px 10px;font-weight:700}
-main{padding:14px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px}
-.card{background:var(--surface);border-radius:14px;overflow:hidden;cursor:pointer}
-.card img{width:100%;height:170px;object-fit:cover}
-.card .title{padding:6px;font-size:13px}
-.hero{height:220px;background-size:cover;background-position:center}
-.detail{padding:14px}
-.episode{padding:10px;margin:6px 0;background:var(--surface);border-radius:10px;cursor:pointer}
-video,iframe{width:100%;height:220px;border-radius:14px;border:none;background:#000}
-nav{position:fixed;bottom:0;left:0;right:0;background:#000;display:flex;justify-content:space-around;padding:10px 0}
-nav button{background:none;border:none;color:var(--muted);font-size:12px}
-nav button.active{color:var(--primary)}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center}
-.modal-card{background:var(--surface);padding:20px;border-radius:16px;width:90%;max-width:360px}
+nav h1{color:#e50914}
+nav input{
+padding:8px;
+border:none;
+border-radius:4px;
+width:200px
+}
+
+/* HERO */
+.hero{
+background:url('https://images.unsplash.com/photo-1525182008055-f88b95ff7980') center/cover;
+height:300px;
+display:flex;
+align-items:flex-end;
+padding:30px
+}
+.hero h2{font-size:32px}
+
+/* SECTION */
+section{padding:30px}
+section h3{margin-bottom:15px}
+
+/* GRID */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+gap:20px
+}
+.card{
+cursor:pointer;
+transition:.3s
+}
+.card img{
+width:100%;
+border-radius:8px
+}
+.card:hover{transform:scale(1.05)}
+.card p{text-align:center;margin-top:5px}
+
+/* MODAL */
+.modal{
+display:none;
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:rgba(0,0,0,.8);
+justify-content:center;
+align-items:center;
+z-index:20
+}
+.modal-content{
+background:#1c1c2e;
+padding:20px;
+border-radius:10px;
+max-width:800px;
+width:90%
+}
+.modal video{
+width:100%;
+border-radius:8px
+}
+.close{
+float:right;
+cursor:pointer;
+font-size:20px
+}
+
+footer{
+text-align:center;
+padding:20px;
+background:#121225;
+margin-top:40px
+}
 </style>
 </head>
 <body>
-<header>
- <div class="logo">Lydonghua</div>
- <input id="search" placeholder="Cari anime / donghua" style="flex:1;margin:0 10px;padding:6px;border-radius:8px;border:none" oninput="doSearch()" />
- <div class="coin" id="coin">🪙 100</div>
-</header><main id="home">
- <h3>Anime & Donghua</h3>
- <div class="grid" id="homeGrid"></div>
-</main><main id="detail" class="hidden">
- <div class="hero" id="detailHero"></div>
- <div class="detail">
-  <h2 id="detailTitle"></h2>
-  <p id="detailMeta"></p>
-  <button class="btn" onclick="playEpisode(1)">▶ Putar</button>
-  <h4>Episode</h4>
-  <div id="episodeList"></div>
- </div>
-</main><main id="player" class="hidden">
- <iframe id="extFrame"></iframe>
-</main><nav>
- <button class="active" onclick="show('home')">Home</button>
- <button onclick="show('history')">Riwayat</button>
-</nav><script>
-let coin=100;
-const series=[
- {title:'Soul Land',eps:250,poster:'https://cdn.myanimelist.net/images/anime/1888/121710.jpg'},
- {title:'Demon Slayer',eps:26,poster:'https://cdn.myanimelist.net/images/anime/1286/99889.jpg'},
- {title:'One Piece',eps:1000,poster:'https://cdn.myanimelist.net/images/anime/6/73245.jpg'}
+
+<nav>
+<h1>StreamDong</h1>
+<input type="text" placeholder="Cari anime..." onkeyup="searchAnime(this.value)">
+</nav>
+
+<div class="hero">
+<h2>Nonton Anime & Donghua Gratis</h2>
+</div>
+
+<section>
+<h3>Anime Populer</h3>
+<div class="grid" id="animeList">
+</div>
+</section>
+
+<section>
+<h3>Donghua Populer</h3>
+<div class="grid" id="donghuaList">
+</div>
+</section>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+<div class="modal-content">
+<span class="close" onclick="closeModal()">✖</span>
+<h3 id="title"></h3>
+<video controls id="video">
+<source src="" type="video/mp4">
+</video>
+</div>
+</div>
+
+<footer>
+<p>© 2026 StreamDong - Demo Frontend</p>
+</footer>
+
+<script>
+const animeData = [
+{title:"Attack on Titan",img:"https://i.imgur.com/J5LVHEL.jpg",video:"https://www.w3schools.com/html/mov_bbb.mp4"},
+{title:"Naruto Shippuden",img:"https://i.imgur.com/Wo7v1xN.jpg",video:"https://www.w3schools.com/html/mov_bbb.mp4"},
+{title:"One Piece",img:"https://i.imgur.com/UePbdph.jpg",video:"https://www.w3schools.com/html/mov_bbb.mp4"}
 ];
-const homeGrid=document.getElementById('homeGrid');
-function render(list){homeGrid.innerHTML='';list.forEach(s=>{const c=document.createElement('div');c.className='card';c.innerHTML=`<img src="${s.poster}"><div class="title">${s.title}</div>`;c.onclick=()=>openDetail(s);homeGrid.appendChild(c);});}
-render(series);
-function openDetail(s){show('detail');detailHero.style.backgroundImage=`url(${s.poster})`;detailTitle.innerText=s.title;detailMeta.innerText=s.eps+' Episode';episodeList.innerHTML='';for(let i=1;i<=Math.min(s.eps,20);i++){episodeList.innerHTML+=`<div class="episode" onclick="playEpisode(${i})">Episode ${i}</div>`;}}
-function playEpisode(ep){if(coin<=0){alert('Koin habis');return;}coin--;document.getElementById('coin').innerText='🪙 '+coin;show('player');extFrame.src=`https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(detailTitle.innerText+' episode '+ep)}`;saveHistory(detailTitle.innerText);} 
-function show(id){document.querySelectorAll('main').forEach(m=>m.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
-function doSearch(){const q=search.value.toLowerCase();render(series.filter(s=>s.title.toLowerCase().includes(q)));}
+
+const donghuaData = [
+{title:"Battle Through The Heavens",img:"https://i.imgur.com/8Jr2y9Q.jpg",video:"https://www.w3schools.com/html/mov_bbb.mp4"},
+{title:"Soul Land",img:"https://i.imgur.com/QwZ6Fq9.jpg",video:"https://www.w3schools.com/html/mov_bbb.mp4"},
+{title:"The King's Avatar",img:"https://i.imgur.com/4X3Jm9z.jpg",video:"https://www.w3schools.com/html/mov_bbb.mp4"}
+];
+
+function render(list,element){
+element.innerHTML="";
+list.forEach(item=>{
+element.innerHTML+=`
+<div class="card" onclick="play('${item.title}','${item.video}')">
+<img src="${item.img}">
+<p>${item.title}</p>
+</div>`
+})
 }
-function closeChat(){document.getElementById('chatModal').classList.add('hidden');}
-const chatKey='ly_chat';
-function sendChat(){const msg=chatInput.value.trim();if(!msg)return;const data=JSON.parse(localStorage.getItem(chatKey)||'[]');data.push({msg});localStorage.setItem(chatKey,JSON.stringify(data));chatInput.value='';renderChat();}
-function renderChat(){const data=JSON.parse(localStorage.getItem(chatKey)||'[]');chatBox.innerHTML='';data.slice(-50).forEach(c=>{const d=document.createElement('div');d.textContent=c.msg;chatBox.appendChild(d);});}
-// history
-function saveHistory(t){const h=JSON.parse(localStorage.getItem('history')||'[]');h.push(t);localStorage.setItem('history',JSON.stringify(h));}
-</script></body>
+
+render(animeData,document.getElementById("animeList"));
+render(donghuaData,document.getElementById("donghuaList"));
+
+function play(title,video){
+document.getElementById("modal").style.display="flex";
+document.getElementById("title").innerText=title;
+document.getElementById("video").src=video;
+}
+
+function closeModal(){
+document.getElementById("modal").style.display="none";
+document.getElementById("video").pause();
+}
+
+function searchAnime(keyword){
+keyword = keyword.toLowerCase();
+const all = [...animeData,...donghuaData];
+const filtered = all.filter(a=>a.title.toLowerCase().includes(keyword));
+render(filtered,document.getElementById("animeList"));
+}
+</script>
+
+</body>
 </html>
