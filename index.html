@@ -1,120 +1,98 @@
 <!DOCTYPE html><html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>StreamDong+</title><!-- Firebase CDN --><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script><style>
-:root{--red:#e50914;--bg:#0f0f1a;--card:#1c1c2e}
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:var(--bg);color:#fff}
-
-/* NAV */
-nav{display:flex;justify-content:space-between;align-items:center;padding:15px 30px;background:#121225;position:sticky;top:0;z-index:10}
-nav h1{color:var(--red)}
-nav .right button{margin-left:10px}
-
-button{background:var(--red);border:none;color:#fff;padding:8px 14px;border-radius:5px;cursor:pointer}
-
-/* HERO */
-.hero{height:320px;background:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.9)),url('https://images.unsplash.com/photo-1525182008055-f88b95ff7980') center/cover;display:flex;align-items:end;padding:30px}
-.hero h2{font-size:34px}
-
-section{padding:30px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:20px}
-.card{background:var(--card);border-radius:10px;overflow:hidden;cursor:pointer;transition:.3s}
-.card img{width:100%;height:230px;object-fit:cover}
-.card p{text-align:center;padding:10px}
-.card:hover{transform:scale(1.05)}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StreamDong App</title><!-- Firebase --><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script><style>
+:root{--bg:#0b0b0f;--card:#14141c;--purple:#b56bff;--text:#fff;--muted:#9a9a9a}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,Arial}
+body{background:var(--bg);color:var(--text)}
+header{padding:20px;display:flex;justify-content:space-between;align-items:center}
+.user{display:flex;gap:12px;align-items:center}
+.user img{width:44px;height:44px;border-radius:50%}
+.search input{background:var(--card);border:none;color:#fff;padding:8px 12px;border-radius:10px}
+.section{padding:0 20px 20px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.poster{cursor:pointer}
+.poster img{width:100%;height:170px;object-fit:cover;border-radius:14px}
 
 /* MODAL */
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);justify-content:center;align-items:center;z-index:20}
-.modal-content{background:var(--card);padding:20px;border-radius:10px;width:95%;max-width:900px}
-.close{float:right;cursor:pointer}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:end}
+.modal-content{background:var(--card);width:100%;border-radius:20px 20px 0 0;padding:20px}
+iframe{width:100%;height:220px;border-radius:12px}
 
-.episodes button{margin:5px;background:#333}
+/* ADMIN */
+.admin{display:none;padding:20px}
+.admin input{width:100%;margin:6px 0;padding:8px;border-radius:8px;border:none}
 
-/* AUTH */
-#authModal input{width:100%;margin:8px 0;padding:8px;border-radius:4px;border:none}
+/* ADS */
+.ads{background:#1e1e2e;border-radius:12px;padding:14px;text-align:center;color:#aaa;margin:10px 0}
 
-footer{text-align:center;padding:20px;background:#121225;margin-top:40px}
+nav{position:fixed;bottom:0;left:0;width:100%;background:#0e0e15;display:flex;justify-content:space-around;padding:12px 0}
+nav div{font-size:12px;color:#777}
+nav .active{color:var(--purple)}
 </style></head>
-<body><nav>
-<h1>StreamDong+</h1>
-<div class="right">
-<span id="userLabel"></span>
-<button onclick="openAuth()">Login</button>
-<button onclick="logout()">Logout</button>
-</div>
-</nav><div class="hero"><h2>Nonton Anime & Donghua Episode Lengkap</h2></div><section>
-<h3>Anime & Donghua (Auto dari YouTube Official)</h3>
-<input type="text" placeholder="Cari anime / donghua..." onkeyup="search(this.value)">
-<br><br>
-<div class="grid" id="list"></div>
-</section><!-- DETAIL MODAL --><div class="modal" id="detailModal">
-<div class="modal-content">
-<span class="close" onclick="closeDetail()">✖</span>
-<h3 id="detailTitle"></h3>
-<iframe id="player" width="100%" height="450" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-<div class="episodes" id="episodeList"></div>
-</div>
-</div><!-- AUTH MODAL --><div class="modal" id="authModal">
-<div class="modal-content">
-<span class="close" onclick="closeAuth()">✖</span>
-<h3>Login / Register</h3>
-<input id="email" placeholder="Email" />
-<input id="password" type="password" placeholder="Password" />
-<button onclick="login()">Login</button>
-<button onclick="register()">Register</button>
-</div>
-</div><footer>© 2026 StreamDong+</footer><script>
-// 🔥 FIREBASE CONFIG (ISI SENDIRI)
-const firebaseConfig = {
-  apiKey: "API_KEY",
-  authDomain: "PROJECT.firebaseapp.com",
-};
+<body><header>
+ <div class="user">
+  <img src="https://i.imgur.com/8Km9tLL.png">
+  <div><small>Welcome</small><strong id="username">Guest</strong></div>
+ </div>
+ <div class="search"><input placeholder="Cari anime / donghua" onkeyup="search(this.value)"></div>
+</header><div class="section">
+ <div class="ads">🔔 Iklan Banner / Membership Promo</div>
+ <h3>Episode Terbaru (Official Only)</h3>
+ <div class="grid" id="list"></div>
+</div><!-- DETAIL --><div class="modal" id="modal">
+ <div class="modal-content">
+  <button onclick="closeDetail()">Tutup</button>
+  <h3 id="detailTitle"></h3>
+  <iframe id="player" allowfullscreen></iframe>
+ </div>
+</div><!-- ADMIN PANEL --><div class="admin" id="adminPanel">
+ <h3>Admin Panel</h3>
+ <input id="title" placeholder="Judul">
+ <input id="thumb" placeholder="Thumbnail URL">
+ <input id="video" placeholder="YouTube Video ID">
+ <button onclick="saveContent()">Simpan</button>
+</div><nav>
+ <div class="active">🏠<br>Home</div>
+ <div onclick="openLogin()">👤<br>Login</div>
+ <div onclick="openAdmin()">🛠<br>Admin</div>
+</nav><script>
+// 🔥 CONFIG
+const firebaseConfig={apiKey:"AIzaSyAEtyXJ9DwidLL4xMsfVgu-TgPoMIU_33Q",authDomain:"PROJECT.firebaseapp.com",projectId:"PROJECT"};
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
+const auth=firebase.auth();
+const db=firebase.firestore();
 
-// DATA
-// DATA (LEGAL SOURCE via YouTube embed – official/trailer/demo)
-const shows=[
-{title:"Attack on Titan (Official)",poster:"https://i.imgur.com/J5LVHEL.jpg",episodes:[
-{ep:1,src:"https://www.youtube.com/embed/MGRm4IzK1SQ"}
-]},
-{title:"Soul Land (Official Donghua)",poster:"https://i.imgur.com/QwZ6Fq9.jpg",episodes:[
-{ep:1,src:"https://www.youtube.com/embed/7Tf-7pE9G6I"}
-]}
+// OFFICIAL CHANNEL WHITELIST
+const OFFICIAL_CHANNELS=[
+ 'UCQ4gZk6bXxG9rZp5W5xYk3A', // contoh
+ 'UC2x7D9C6kqzLzZQ9vZzQ'
 ];
 
-// YOUTUBE API AUTO LOAD
-const API_KEY = "AIzaSyAEtyXJ9DwidLL4xMsfVgu-TgPoMIU_33Q";
-const list = document.getElementById('list');
+// AUTH
+auth.onAuthStateChanged(u=>{document.getElementById('username').innerText=u?u.email:'Guest'});
+function openLogin(){const e=prompt('Email');const p=prompt('Password');auth.signInWithEmailAndPassword(e,p).catch(()=>auth.createUserWithEmailAndPassword(e,p))}
 
+// SEARCH OFFICIAL ONLY
 async function search(q){
- if(q.length < 3) return;
- list.innerHTML = "";
- const res = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=12&q=${q} anime donghua official&key=${API_KEY}`);
- const data = await res.json();
- data.items.forEach(v=>{
-  list.innerHTML += `
-   <div class=\"card\" onclick=\"play('https://www.youtube.com/embed/${v.id.videoId}')\">
-    <img src=\"${v.snippet.thumbnails.high.url}\">
-    <p>${v.snippet.title}</p>
-   </div>`;
+ if(q.length<3) return;
+ const res=await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=12&q=${q} anime donghua official&key=YOUTUBE_API_KEY`);
+ const d=await res.json();
+ const list=document.getElementById('list');list.innerHTML='';
+ d.items.filter(v=>OFFICIAL_CHANNELS.includes(v.snippet.channelId)).forEach(v=>{
+  list.innerHTML+=`<div class="poster" onclick="openDetail('${v.snippet.title}','${v.id.videoId}')"><img src="${v.snippet.thumbnails.high.url}"></div>`
  });
 }
 
-function play(src){
- document.getElementById('detailModal').style.display='flex';
- document.getElementById('player').src = src;
-}
+function openDetail(t,id){document.getElementById('detailTitle').innerText=t;document.getElementById('player').src='https://www.youtube.com/embed/'+id;document.getElementById('modal').style.display='flex'}
+function closeDetail(){document.getElementById('modal').style.display='none'}
 
-function closeDetail(){
- document.getElementById('detailModal').style.display='none';
- document.getElementById('player').src = "";
+// ADMIN CRUD
+function openAdmin(){document.getElementById('adminPanel').style.display='block'}
+function saveContent(){
+ db.collection('shows').add({title:title.value,thumb:thumb.value,video:video.value})
+ alert('Konten tersimpan');
 }
-
-auth.onAuthStateChanged(u=>{
-document.getElementById('userLabel').innerText=u?u.email:'Guest';
-});
 </script></body>
 </html>
