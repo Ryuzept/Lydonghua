@@ -1,147 +1,122 @@
 <!DOCTYPE html><html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lydonghua – Anime & Donghua Streaming</title>
-  <link rel="manifest" href="manifest.json">
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-  <style>
-    :root{
-      --primary:#7c3aed;
-      --bg:#0b0b10;
-      --card:#141420;
-      --text:#ffffff;
-    }
-    body{
-      margin:0;font-family:Arial,Helvetica,sans-serif;
-      background:var(--bg);color:var(--text)
-    }
-    header{
-      display:flex;justify-content:space-between;align-items:center;
-      padding:14px 16px;background:linear-gradient(90deg,var(--primary),#000)
-    }
-    header h1{margin:0;font-size:20px}
-    #searchInput{
-      width:100%;padding:10px;border-radius:8px;border:none;margin:10px 0
-    }
-    .container{padding:16px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
-    .card{
-      background:var(--card);border-radius:12px;overflow:hidden;cursor:pointer
-    }
-    .card img{width:100%;height:200px;object-fit:cover}
-    .card h4{margin:6px;font-size:14px}
-    .card p{margin:6px;font-size:12px;opacity:.7}
-    .player{margin-top:16px}
-    video{width:100%;border-radius:12px;background:#000}
-    .controls{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
-    button{
-      padding:8px 12px;border:none;border-radius:8px;
-      background:var(--primary);color:white;cursor:pointer
-    }
-    nav{
-      position:fixed;bottom:0;left:0;right:0;
-      display:flex;justify-content:space-around;
-      background:#0f0f1a;padding:10px 0
-    }
-    nav button{background:none;color:white;font-size:12px}
-  </style>
-</head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lydonghua</title><style>
+:root{
+ --primary:#8b5cf6;
+ --bg:#0b0b10;
+ --surface:#16161f;
+ --text:#ffffff;
+ --muted:#b5b5c0;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui;background:var(--bg);color:var(--text)}
+.hidden{display:none}
+
+header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#000;position:sticky;top:0;z-index:99}
+.logo{font-weight:800;font-size:20px;color:var(--primary)}
+.vip-btn{background:gold;color:#000;border:none;border-radius:12px;padding:6px 12px;font-weight:700}
+
+main{padding:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px}
+.card{background:var(--surface);border-radius:14px;overflow:hidden;cursor:pointer}
+.card img{width:100%;height:170px;object-fit:cover}
+.card .title{padding:6px;font-size:13px}
+
+.hero{height:220px;background-size:cover;background-position:center}
+.detail{padding:14px}
+.episode{padding:10px;margin:6px 0;background:var(--surface);border-radius:10px}
+
+video{width:100%;background:#000;border-radius:14px}
+
+nav{position:fixed;bottom:0;left:0;right:0;background:#000;display:flex;justify-content:space-around;padding:10px 0}
+nav button{background:none;border:none;color:var(--muted);font-size:12px}
+nav button.active{color:var(--primary)}
+
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center}
+.modal-card{background:var(--surface);padding:20px;border-radius:16px;width:80%;max-width:320px}
+.modal-card button{width:100%;margin-top:10px}
+
+.btn{background:var(--primary);color:#fff;border:none;border-radius:14px;padding:10px}
+
+.theme-fab{position:fixed;right:16px;bottom:80px}
+.theme-panel{display:none;background:#000;padding:10px;border-radius:16px;gap:8px}
+.theme-fab.open .theme-panel{display:flex}
+.theme-btn{width:24px;height:24px;border-radius:50%;border:none}
+</style></head>
 <body><header>
-  <h1>Lydonghua</h1>
-  <div>🪙 <span id="coin">120</span> | 👑 VIP</div>
-</header><div class="container">
-  <input id="searchInput" placeholder="Cari anime atau donghua..." />
-  <button onclick="doSearch()">🔍 Cari</button>  <div id="results" class="grid"></div>  <div class="player">
-    <h3 id="playerTitle">Pilih Anime</h3>
-    <p id="episodeCount"></p>
-    <video id="video" controls></video>
-    <div class="controls">
-      <button onclick="play('ep1','server1')">EP 1 • Server 1</button>
-      <button onclick="play('ep1','server2')">EP 1 • Server 2</button>
-      <button onclick="play('ep2','server1')">EP 2 • Server 1</button>
-    </div>
-  </div>
-</div><nav>
-  <button>🏠 Home</button>
-  <button>📂 Catalog</button>
-  <button>▶ Player</button>
-  <button>🎨 Tema</button>
-  <button>👤 Akun</button>
-</nav><script>
-const video = document.getElementById('video');
-let currentEp = 'ep1';
+ <div class="logo">Lydonghua</div>
+ <button class="vip-btn" onclick="openVIP()">VIP</button>
+</header><main id="home">
+ <h3>Anime & Donghua Populer</h3>
+ <div class="grid" id="homeGrid"></div>
+</main><main id="detail" class="hidden">
+ <div class="hero" id="detailHero"></div>
+ <div class="detail">
+  <h2 id="detailTitle"></h2>
+  <p id="detailMeta"></p>
+  <button class="btn" onclick="playEpisode(1)">▶ Nonton Sekarang</button>
+  <h4>Episode</h4>
+  <div id="episodeList"></div>
+ </div>
+</main><main id="player" class="hidden">
+ <video id="video" controls></video>
+</main><main id="genre" class="hidden"><h2>Genre</h2></main>
+<main id="account" class="hidden"><h2>Akun</h2></main>
+<main id="history" class="hidden"><h2>Riwayat</h2></main>
+<main id="rank" class="hidden"><h2>Peringkat</h2></main><nav>
+ <button onclick="show('home')" class="active">Home</button>
+ <button onclick="show('genre')">Genre</button>
+ <button onclick="show('account')">Akun</button>
+ <button onclick="show('history')">Riwayat</button>
+ <button onclick="show('rank')">Peringkat</button>
+</nav><div id="vipModal" class="modal hidden">
+ <div class="modal-card">
+  <h3>Paket VIP</h3>
+  <button class="btn">VIP 1 Bulan</button>
+  <button class="btn">VIP 3 Bulan</button>
+  <button class="btn">VIP 12 Bulan</button>
+  <button class="btn" onclick="closeVIP()">Tutup</button>
+ </div>
+</div><div class="theme-fab" id="themeFab">
+ <div class="theme-panel">
+  <button class="theme-btn" style="background:#8b5cf6" onclick="setTheme('#8b5cf6')"></button>
+  <button class="theme-btn" style="background:#ef4444" onclick="setTheme('#ef4444')"></button>
+  <button class="theme-btn" style="background:#3b82f6" onclick="setTheme('#3b82f6')"></button>
+  <button class="theme-btn" style="background:#facc15" onclick="setTheme('#facc15')"></button>
+ </div>
+ <button class="btn" onclick="toggleTheme()">🎨</button>
+</div><script>
+const series=[
+ {id:1,title:'Soul Land',eps:250,poster:'https://cdn.myanimelist.net/images/anime/1888/121710.jpg'},
+ {id:2,title:'Demon Slayer',eps:26,poster:'https://cdn.myanimelist.net/images/anime/1286/99889.jpg'},
+ {id:3,title:'One Piece',eps:1000,poster:'https://cdn.myanimelist.net/images/anime/6/73245.jpg'}
+]
 
-const VIDEO_SOURCES = {
-  ep1:{
-    server1:'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-    server2:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'
-  },
-  ep2:{
-    server1:'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4'
-  }
-};
+const homeGrid=document.getElementById('homeGrid')
+series.forEach(s=>{
+ const c=document.createElement('div');c.className='card'
+ c.innerHTML=`<img src="${s.poster}"><div class="title">${s.title}</div>`
+ c.onclick=()=>openDetail(s)
+ homeGrid.appendChild(c)
+})
 
-function play(ep, server){
-  currentEp = ep;
-  const url = VIDEO_SOURCES[ep][server];
-  if(url.endsWith('.m3u8')){
-    if(video.canPlayType('application/vnd.apple.mpegurl')){
-      video.src = url; video.play();
-    } else if(window.Hls){
-      const hls = new Hls();
-      hls.loadSource(url);
-      hls.attachMedia(video);
-    }
-  } else {
-    video.src = url; video.play();
-  }
+function openDetail(s){
+ show('detail')
+ detailHero.style.backgroundImage=`url(${s.poster})`
+ detailTitle.innerText=s.title
+ detailMeta.innerText=s.eps+' Episode'
+ episodeList.innerHTML=''
+ for(let i=s.eps;i>=1;i--)episodeList.innerHTML+=`<div class="episode" onclick="playEpisode(${i})">Episode ${i}</div>`
 }
 
-video.addEventListener('timeupdate',()=>{
-  localStorage.setItem(currentEp+'-time', video.currentTime);
-});
+function playEpisode(ep){show('player');video.src='https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'}
 
-video.addEventListener('loadedmetadata',()=>{
-  const t = localStorage.getItem(currentEp+'-time');
-  if(t) video.currentTime = parseFloat(t);
-});
-
-video.addEventListener('ended',()=>{
-  if(currentEp === 'ep1') play('ep2','server1');
-});
-
-async function doSearch(){
-  const q = document.getElementById('searchInput').value;
-  if(!q) return;
-  const res = await fetch('https://api.jikan.moe/v4/anime?q='+q);
-  const data = await res.json();
-  renderResults(data.data);
-}
-
-function renderResults(list){
-  const box = document.getElementById('results');
-  box.innerHTML='';
-  list.slice(0,12).forEach(a=>{
-    const d = document.createElement('div');
-    d.className='card';
-    d.innerHTML=`<img src="${a.images.jpg.image_url}"><h4>${a.title}</h4><p>Episode: ${a.episodes||'?'} </p>`;
-    d.onclick=()=>openAnime(a);
-    box.appendChild(d);
-  });
-}
-
-function openAnime(anime){
-  document.getElementById('playerTitle').innerText = anime.title;
-  document.getElementById('episodeCount').innerText = 'Total Episode: '+(anime.episodes||'?');
-  play('ep1','server1');
-  saveHistory(anime.title);
-}
-
-function saveHistory(title){
-  let h = JSON.parse(localStorage.getItem('history')||'[]');
-  if(!h.includes(title)) h.push(title);
-  localStorage.setItem('history', JSON.stringify(h));
-}
+function show(id){document.querySelectorAll('main').forEach(m=>m.classList.add('hidden'));document.getElementById(id).classList.remove('hidden')}
+function openVIP(){vipModal.classList.remove('hidden')}
+function closeVIP(){vipModal.classList.add('hidden')}
+function toggleTheme(){themeFab.classList.toggle('open')}
+function setTheme(p){document.documentElement.style.setProperty('--primary',p)}
 </script></body>
 </html>
